@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Post — BIONEP</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="global.css"/>
+  <style>
+  /* ─── TOKENS ─────────────────────────────────────────────── */
+  :root{
+    --green-950:#003527;
+    --green-900:#001c11;
+    --green-700:#006b5f;
+    --green-600:#0b513d;
+    --green-mint:rgba(176,240,214,.3);
+    --cyan:#71f8e4;
+    --red:#560f11;
+    --gold:#c49a2a;
+    --bg:#f8f9fa;
+    --bg-footer:#061710;
+    --text:#404944;
+    --white:#fff;
+    --shadow-heavy:0 25px 50px -12px rgba(0,0,0,.25);
+    --shadow-light:0 12px 30px 0 rgba(0,0,0,.04);
+    --r-card:20px;
+    --r-pill:9999px;
+  }
+
+  /* ─── RESET ──────────────────────────────────────────────── */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden}
+  a{text-decoration:none;color:inherit}
+  button{border:none;cursor:pointer;font-family:inherit}
+  img{display:block;max-width:100%;object-fit:cover; border-radius: inherit;}
+  ul{list-style:none}
+
+  /* ─── SCROLLBAR ─────────────────────────────────────────── */
+  ::-webkit-scrollbar{width:5px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--green-700);border-radius:99px}
+
+  /* ─── REVEAL ─────────────────────────────────────────────── */
+  .r{opacity:0;transform:translateY(24px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+  .r.on{opacity:1;transform:none}
+  .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+
+  <div id="bionep-nav-placeholder"></div>
+
+  /* ══════════════════════════════════════════════════════════
+     BLOG LAYOUT
+  ══════════════════════════════════════════════════════════ */
+  .blog-wrap {
+    max-width: 1280px; margin: 157px auto 120px; /* offset nav */
+    padding: 0 32px;
+    display: grid; grid-template-columns: 2.5fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  /* ─── ARTICLE MAIN ─── */
+  .article-main {
+    background: white; border-radius: var(--r-card);
+    box-shadow: var(--shadow-light); border: 1px solid rgba(0,0,0,0.03);
+    overflow: hidden; padding: 48px;
+  }
+
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 13px; font-weight: 600; color: #a1a1aa;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 32px;
+  }
+  .breadcrumbs a { transition: color .2s; }
+  .breadcrumbs a:hover { color: var(--green-700); }
+  .breadcrumbs .current { color: var(--green-700); }
+
+  .post-tag {
+    font-size: 11px; font-weight: 800; color: var(--gold); display: inline-block;
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px;
+  }
+
+  .article-title {
+    font-size: clamp(28px, 4vw, 42px); font-weight: 800; color: var(--green-950);
+    line-height: 1.2; margin-bottom: 24px; letter-spacing: -1px;
+  }
+
+  .article-meta {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; font-weight: 600; color: #a1a1aa;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    padding-bottom: 32px; margin-bottom: 32px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .article-featured-img {
+    width: 100%; height: auto; max-height: 500px; border-radius: 12px;
+    margin-bottom: 48px;
+  }
+
+  .article-content {
+    font-size: 17px; line-height: 1.8; color: var(--text);
+  }
+  .article-content p { margin-bottom: 24px; }
+  .article-content h2 {
+    font-size: 26px; font-weight: 800; color: var(--green-950);
+    margin: 48px 0 24px; letter-spacing: -0.5px;
+  }
+  .article-content blockquote {
+    font-size: 20px; font-style: italic; color: var(--green-700);
+    border-left: 4px solid var(--gold); padding: 24px 32px;
+    background: var(--green-mint); border-radius: 0 16px 16px 0;
+    margin: 40px 0;
+  }
+  .article-content ul {
+    margin-bottom: 24px; padding-left: 24px; list-style-type: disc;
+  }
+  .article-content li { margin-bottom: 12px; padding-left: 8px; }
+
+  /* ─── RIGHT: SIDEBAR (Exact same as blog) ─── */
+  .blog-sidebar {
+    display: flex; flex-direction: column; gap: 40px;
+    top: 120px; position: sticky; 
+  }
+  .widget {
+    background: white; border-radius: 20px;
+    box-shadow: var(--shadow-light); padding: 32px;
+    border: 1px solid rgba(0,0,0,0.03);
+  }
+  .widget-title {
+    font-size: 12px; font-weight: 800; color: var(--green-950);
+    text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+  }
+  .widget-title::before {
+    content: ''; width: 4px; height: 16px; background: var(--gold); border-radius: 4px;
+  }
+  .search-box {
+    position: relative; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+    overflow: hidden; transition: border-color .3s;
+  }
+  .search-box:focus-within { border-color: var(--green-700); }
+  .search-input {
+    width: 100%; border: none; padding: 16px 48px 16px 20px;
+    font-family: inherit; font-size: 15px; background: #fdfdfd; outline: none;
+  }
+  .search-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: transparent; border: none; color: #a1a1aa; padding: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .recent-posts { display: flex; flex-direction: column; gap: 16px; }
+  .recent-post-link {
+    display: block; font-size: 14px; font-weight: 700; color: var(--text);
+    line-height: 1.5; text-decoration: none; padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.06); transition: color .2s;
+  }
+  .recent-post-link:last-child { border-bottom: none; padding-bottom: 0; }
+  .recent-post-link:hover { color: var(--green-700); }
+  .cat-link {
+    display: block; font-size: 15px; font-weight: 500; color: var(--text);
+    padding: 12px 16px; border-radius: 10px; text-decoration: none;
+    transition: all .2s; background: rgba(0,0,0,0.02);
+  }
+  .cat-link:hover { background: var(--green-mint); color: var(--green-700); font-weight: 700; }
+  .social-icons { display: flex; align-items: center; gap: 12px; }
+  .btn-social {
+    width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+    color: var(--text); background: white; transition: all .2s;
+  }
+  .btn-social:hover {
+    background: var(--green-700); color: white; border-color: transparent; transform: translateY(-2px);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════════════════ */
+  @media(max-width:1100px){
+    .blog-wrap { grid-template-columns: 1fr; gap: 48px; }
+    .blog-sidebar { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .col-span { grid-column: 1 / -1; }
+  }
+  @media(max-width:768px){
+    .article-main { padding: 32px 24px; }
+    .blog-sidebar { grid-template-columns: 1fr; }
+    .article-meta { flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+    .btn-primary,.nav-btn{will-change:transform}
+  .nav-btn{
+    background:linear-gradient(145deg,#004d39 0%,#003527 100%);
+    color:white;padding:12px 28px;border-radius:var(--r-pill);
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:12px;letter-spacing:1px;text-transform:uppercase;
+    box-shadow:0 10px 20px -5px rgba(0,53,39,.3);
+    border:none;display:inline-flex;position:relative;overflow:hidden;
+    transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s;
+    text-decoration:none;
+  }
+  .nav-btn::before{
+    content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+    transition:left .5s ease;
+  }
+  .nav-btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px -5px rgba(0,53,39,.5)}
+  .nav-btn:hover::before{left:100%}
+</style>
+</head>
+<body>
+
+<div id="bionep-nav-placeholder"></div>
+
+<!-- LAYOUT -->
+<div class="blog-wrap">
+  
+  <!-- LEFT ARTICLE CORE -->
+  <main class="article-main r d1">
+    
+    <div class="breadcrumbs">
+       <a href="index.html">Home</a>
+       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+       <a href="blog.html">Notícias</a>
+       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+       <span class="current">Artigo</span>
+    </div>
+
+    <span class="post-tag">NOTÍCIAS</span>
+    <h1 class="article-title">Segunda Turma de Especialização em Implantodontia BIONEP Inicia Aulas</h1>
+    
+    <div class="article-meta">
+      <span><svg style="margin-right:6px;width:14px;margin-bottom:-2px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 16 DE MAIO DE 2019</span>
+      <span style="color:var(--green-950);">POR <strong>INSTITUTO BIONEP</strong></span>
+    </div>
+
+    <img src="especialistas.png" class="article-featured-img r d2" style="filter: brightness(0.9);" alt="Professor em aula de Implantodontia">
+
+    <div class="article-content r d3">
+      <p>Iniciou na Bionep a segunda turma de Especialização em Implantodontia, coordenada pelo ilustre Prof. Jaques Luiz - mestre e doutorando em Implantodontia. Em sua grade estrutural meticulosamente concebida, o curso apresenta-se em 24 módulos focados intensamente na prática cirúrgica.</p>
+      
+      <h2>Um Novo Marco na Educação Superior Odontológica</h2>
+      <p>A BIONEP segue quebrando os paradigmas de ensino técnico com sua infraestrutura invejável. A nova turma teve o privilégio de estrear nossos modernos centros cirúrgicos. Desde o uso de tomografias em 3D de alta precisão ao acompanhamento minucioso por preceptores com grande relevância clínica.</p>
+      
+      <blockquote>
+        "O aprendizado só é perene quando a teoria abraça a prática no instante seguinte. Esse é o pilar que sustenta os especialistas formados pela Bionep." — Prof. Jaques Luiz.
+      </blockquote>
+      
+      <p>Para se estruturar da forma correta no mercado moderno de Implantodontia os alunos não apenas cumprem protocolos antigos, mas aprendem sobre o fluxo de atendimento em uma clínica contemporânea.</p>
+
+      <ul>
+        <li>Acompanhamento clínico imediato com pacientes reais.</li>
+        <li>Bancadas de simulação cirúrgica com tecnologia hapti-sensitiva.</li>
+        <li>Amplo ciclo de Networking entre alunos e profissionais renomados do ramo.</li>
+      </ul>
+
+      <p>Fique de olho em nossas inscrições e reserve o seu espaço em nossa próxima turma, uma vez que as vagas dessa imersão e especialização são esgotadas com muita facilidade pelas indicações corporativas.</p>
+    </div>
+
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="blog-sidebar r d2">
+    
+    <!-- Search widget -->
+    <div class="widget col-span">
+      <div class="search-box">
+        <input type="text" class="search-input" placeholder="Pesquisar artigos...">
+        <button class="search-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Recent Posts -->
+    <div class="widget">
+      <h3 class="widget-title">Posts Recentes</h3>
+      <div class="recent-posts">
+        <a href="#" class="recent-post-link">SEGUNDA TURMA DE ESPECIALIZAÇÃO EM IMPLANTODONTIA BIONEP</a>
+        <a href="#" class="recent-post-link">SEJA UM ESPECIALISTA EM HARMONIZAÇÃO FACIAL</a>
+        <a href="#" class="recent-post-link">ALUNOS COMEMORAM RESULTADOS ALCANÇADOS NA APRESENTAÇÃO DE TCCS</a>
+        <a href="#" class="recent-post-link">CURSO DE ANCORAGEM ESQUELÉTICA EXTRA-ALVEOLAR FOI REALIZADO</a>
+      </div>
+    </div>
+
+    <!-- Category -->
+    <div class="widget">
+      <h3 class="widget-title">Categorias</h3>
+      <a href="#" class="cat-link">Notícias (24)</a>
+    </div>
+
+    <!-- Social -->
+    <div class="widget">
+      <h3 class="widget-title">Siga-nos</h3>
+      <div class="social-icons">
+        <a href="#" class="btn-social">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+        </a>
+        <a href="#" class="btn-social">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+
+<div id="bionep-footer-placeholder"></div>
+
+<script>
+/* ── Reveal ──────────────────────────────────────────── */
+const rEls = document.querySelectorAll('.r');
+const rObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on') });
+}, { threshold:.1, rootMargin:'0px 0px -40px 0px' });
+rEls.forEach(el => rObs.observe(el));
+</script>
+<script src="components.js"></script>
+</body>
+</html>

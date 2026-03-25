@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notícias — BIONEP</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="global.css"/>
+  <style>
+  /* ─── TOKENS ─────────────────────────────────────────────── */
+  :root{
+    --green-950:#003527;
+    --green-900:#001c11;
+    --green-700:#006b5f;
+    --green-600:#0b513d;
+    --green-mint:rgba(176,240,214,.3);
+    --cyan:#71f8e4;
+    --red:#560f11;
+    --gold:#c49a2a;
+    --gold-soft:rgba(196,154,42,.15);
+    --bg:#f8f9fa;
+    --bg-dark:#1b1913;     /* courses */
+    --bg-bento:#093220;    /* bento contact */
+    --bg-footer:#061710;   /* footer */
+    --text:#404944;
+    --text2:#414944;
+    --icon-bg:#edeef0;
+    --border-green:rgba(6,78,59,.3);
+    --footer-text:rgba(167,243,208,.6);
+    --white:#fff;
+    --shadow-heavy:0 25px 50px -12px rgba(0,0,0,.25);
+    --shadow-light:0 12px 30px 0 rgba(0,0,0,.04);
+    --r-card:20px;
+    --r-pill:9999px;
+  }
+
+  /* ─── RESET ──────────────────────────────────────────────── */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden}
+  a{text-decoration:none;color:inherit}
+  button{border:none;cursor:pointer;font-family:inherit}
+  img{display:block;max-width:100%;object-fit:cover; border-radius: inherit;}
+  ul{list-style:none}
+
+  /* ─── SCROLLBAR ─────────────────────────────────────────── */
+  ::-webkit-scrollbar{width:5px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--green-700);border-radius:99px}
+
+  /* ─── REVEAL ─────────────────────────────────────────────── */
+  .r{opacity:0;transform:translateY(24px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+  .r.on{opacity:1;transform:none}
+  .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+
+  /* ══════════════════════════════════════════════════════════
+     HEADER NAV (Will be synced)
+  ══════════════════════════════════════════════════════════ */
+  <div id="bionep-nav-placeholder"></div>
+
+  /* ══════════════════════════════════════════════════════════
+     PAGE HERO (Breadcrumbs)
+  ══════════════════════════════════════════════════════════ */
+  .page-hero {
+    margin-top: 93px;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 40px 0;
+  }
+  .page-hero .wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .page-title {
+    font-size: 28px; font-weight: 800; color: var(--green-950); letter-spacing: -0.5px;
+  }
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 13px; font-weight: 600; color: #a1a1aa;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .breadcrumbs a { transition: color .2s; }
+  .breadcrumbs a:hover { color: var(--green-700); }
+  .breadcrumbs .current { color: var(--green-700); }
+
+  /* ══════════════════════════════════════════════════════════
+     BLOG LAYOUT
+  ══════════════════════════════════════════════════════════ */
+  .blog-wrap {
+    max-width: 1280px; margin: 64px auto 120px;
+    padding: 0 32px;
+    display: grid; grid-template-columns: 2.5fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  /* ─── LEFT: ARTICLES LIST ─── */
+  .blog-main {
+    display: flex; flex-direction: column; gap: 40px;
+  }
+  
+  .post-card {
+    display: grid; grid-template-columns: 1fr 1.2fr;
+    background: white; border-radius: var(--r-card);
+    box-shadow: var(--shadow-light); border: 1px solid rgba(0,0,0,0.03);
+    transition: transform .3s, box-shadow .3s;
+    overflow: hidden; text-decoration: none;
+    cursor: pointer;
+  }
+  .post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+  }
+  .post-img {
+    height: 100%; min-height: 280px; position: relative;
+    overflow: hidden;
+  }
+  .post-img img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    transition: transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  .post-card:hover .post-img img { transform: scale(1.05); }
+
+  .post-content {
+    padding: 40px; display: flex; flex-direction: column; justify-content: center;
+  }
+  .post-tag {
+    font-size: 11px; font-weight: 800; color: var(--gold);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;
+  }
+  .post-title {
+    font-size: 22px; font-weight: 800; color: var(--green-950);
+    line-height: 1.3; margin-bottom: 16px; letter-spacing: -0.5px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .post-desc {
+    font-size: 15px; color: var(--text); line-height: 1.6;
+    margin-bottom: 32px;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .post-meta {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; font-weight: 600; color: #a1a1aa;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    border-top: 1px solid rgba(0,0,0,0.06); padding-top: 20px; margin-top: auto;
+  }
+  
+  .pagination {
+    display: flex; align-items: center; gap: 8px; margin-top: 24px;
+    justify-content: flex-end;
+  }
+  .page-link {
+    width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center;
+    background: white; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px;
+    font-weight: 700; color: var(--text); font-size: 15px;
+    transition: all .2s; cursor: pointer; text-decoration: none;
+  }
+  .page-link:hover { background: var(--green-mint); border-color: transparent; color: var(--green-700); }
+  .page-link.active { background: var(--green-700); color: white; border-color: transparent; }
+
+  /* ─── RIGHT: SIDEBAR ─── */
+  .blog-sidebar {
+    display: flex; flex-direction: column; gap: 40px;
+    top: 120px;
+    position: sticky; /* smooth sticking */
+  }
+  .widget {
+    background: white; border-radius: 20px;
+    box-shadow: var(--shadow-light); padding: 32px;
+    border: 1px solid rgba(0,0,0,0.03);
+  }
+  .widget-title {
+    font-size: 12px; font-weight: 800; color: var(--green-950);
+    text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+  }
+  .widget-title::before {
+    content: ''; width: 4px; height: 16px; background: var(--gold); border-radius: 4px;
+  }
+  
+  /* Search */
+  .search-box {
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+    overflow: hidden; transition: border-color .3s;
+  }
+  .search-box:focus-within { border-color: var(--green-700); }
+  .search-input {
+    width: 100%; border: none; padding: 16px 48px 16px 20px;
+    font-family: inherit; font-size: 15px; color: var(--green-950);
+    background: #fdfdfd; outline: none;
+  }
+  .search-input::placeholder { color: #a1a1aa; font-weight: 500; }
+  .search-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: transparent; border: none; color: #a1a1aa; padding: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  
+  /* Recent Posts */
+  .recent-posts {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .recent-post-link {
+    display: block; font-size: 14px; font-weight: 700; color: var(--text);
+    line-height: 1.5; text-decoration: none; padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.06); transition: color .2s;
+  }
+  .recent-post-link:last-child { border-bottom: none; padding-bottom: 0; }
+  .recent-post-link:hover { color: var(--green-700); }
+  
+  /* Categories */
+  .cat-link {
+    display: block; font-size: 15px; font-weight: 500; color: var(--text);
+    padding: 12px 16px; border-radius: 10px; text-decoration: none;
+    transition: all .2s; background: rgba(0,0,0,0.02);
+  }
+  .cat-link:hover { background: var(--green-mint); color: var(--green-700); font-weight: 700; }
+
+  /* Social */
+  .social-icons {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .btn-social {
+    width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+    color: var(--text); background: white; transition: all .2s;
+  }
+  .btn-social:hover {
+    background: var(--green-700); color: white; border-color: transparent;
+    transform: translateY(-2px);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════════════════ */
+  @media(max-width:1100px){
+    .blog-wrap { grid-template-columns: 1fr; gap: 48px; }
+    .blog-sidebar { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .col-span { grid-column: 1 / -1; }
+  }
+  @media(max-width:768px){
+    .post-card { grid-template-columns: 1fr; }
+    .post-img { min-height: 220px; }
+    .post-content { padding: 32px; }
+    .page-hero .wrap { flex-direction: column; align-items: flex-start; }
+    .blog-sidebar { grid-template-columns: 1fr; }
+  }
+    .btn-primary,.nav-btn{will-change:transform}
+  .nav-btn{
+    background:linear-gradient(145deg,#004d39 0%,#003527 100%);
+    color:white;padding:12px 28px;border-radius:var(--r-pill);
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:12px;letter-spacing:1px;text-transform:uppercase;
+    box-shadow:0 10px 20px -5px rgba(0,53,39,.3);
+    border:none;display:inline-flex;position:relative;overflow:hidden;
+    transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s;
+    text-decoration:none;
+  }
+  .nav-btn::before{
+    content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+    transition:left .5s ease;
+  }
+  .nav-btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px -5px rgba(0,53,39,.5)}
+  .nav-btn:hover::before{left:100%}
+</style>
+</head>
+<body>
+
+<div id="bionep-nav-placeholder"></div>
+
+<!-- Title & Breadcrumbs -->
+<section class="page-hero">
+  <div class="wrap r d1">
+    <h1 class="page-title">Notícias</h1>
+    <div class="breadcrumbs">
+       <a href="index.html">Home</a>
+       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+       <span class="current">Notícias</span>
+    </div>
+  </div>
+</section>
+
+<!-- LAYOUT -->
+<div class="blog-wrap">
+  
+  <!-- LEFT LIST -->
+  <main class="blog-main r d2">
+    
+    <!-- Post 1 -->
+    <a href="#" class="post-card">
+       <div class="post-img"><img src="especialistas.png" style="filter: brightness(0.9);" alt="Turma Implantodontia"></div>
+       <div class="post-content">
+          <span class="post-tag">NOTÍCIAS</span>
+          <h2 class="post-title">SEGUNDA TURMA DE ESPECIALIZAÇÃO EM IMPLANTODONTIA BIONEP</h2>
+          <p class="post-desc">Iniciou na Bionep a segunda turma de Especialização em Implantodontia, coordenada pelo Prof. Jaques Luiz - mestre e doutorando em Implantodontia. Em sua grade, o curso apresenta-se em 24 módulos focados intensamente na prática cirúrgica.</p>
+          <div class="post-meta">
+            <span><svg style="margin-right:6px;width:12px;margin-bottom:-2px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Comentários Desativos</span>
+            <span style="color:var(--green-950);">16 DE MAIO DE 2019</span>
+          </div>
+       </div>
+    </a>
+    
+    <!-- Post 2 -->
+    <a href="#" class="post-card">
+       <div class="post-img"><img src="https://www.figma.com/api/mcp/asset/cac9872f-6d17-445c-b7f3-ddd38f0e99e7" alt="Harmonização Facial"></div>
+       <div class="post-content">
+          <span class="post-tag">NOTÍCIAS</span>
+          <h2 class="post-title">SEJA UM ESPECIALISTA EM HARMONIZAÇÃO FACIAL</h2>
+          <p class="post-desc">Com importância reconhecida e cada vez mais procurada por pacientes, a Harmonização Orofacial tem relevância que vai muito além da estética. Neste caso, os benefícios para a saúde são incontáveis e elevam drasticamente o nível de vida do seu paciente clínico diário.</p>
+          <div class="post-meta">
+            <span><svg style="margin-right:6px;width:12px;margin-bottom:-2px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Comentários Desativos</span>
+            <span style="color:var(--green-950);">27 DE FEVEREIRO DE 2019</span>
+          </div>
+       </div>
+    </a>
+
+    <!-- Post 3 -->
+    <a href="#" class="post-card">
+       <div class="post-img"><img src="campus.png" style="filter: sepia(0.3) brightness(0.9);" alt="TCCs"></div>
+       <div class="post-content">
+          <span class="post-tag">NOTÍCIAS</span>
+          <h2 class="post-title">ALUNOS COMEMORAM RESULTADOS ALCANÇADOS NA APRESENTAÇÃO DE TCCS</h2>
+          <p class="post-desc">As últimas semanas foram repletas de boas notícias aqui na Bionep! Tivemos diversas bancas com apresentação de TCC. Nossos alunos tiveram um desempenho excelente refletindo totalmente a nossa metodologia Premium. Estamos muito orgulhosos das novas teses submetidas para aprovação!</p>
+          <div class="post-meta">
+            <span><svg style="margin-right:6px;width:12px;margin-bottom:-2px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Comentários Desativos</span>
+            <span style="color:var(--green-950);">25 DE FEVEREIRO DE 2019</span>
+          </div>
+       </div>
+    </a>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <a href="#" class="page-link active">1</a>
+      <a href="#" class="page-link">2</a>
+      <a href="#" class="page-link">3</a>
+      <a href="#" class="page-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+    </div>
+
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="blog-sidebar r d3">
+    
+    <!-- Search widget -->
+    <div class="widget col-span">
+      <div class="search-box">
+        <input type="text" class="search-input" placeholder="Pesquisar artigos...">
+        <button class="search-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Recent Posts -->
+    <div class="widget">
+      <h3 class="widget-title">Posts Recentes</h3>
+      <div class="recent-posts">
+        <a href="#" class="recent-post-link">SEGUNDA TURMA DE ESPECIALIZAÇÃO EM IMPLANTODONTIA BIONEP</a>
+        <a href="#" class="recent-post-link">SEJA UM ESPECIALISTA EM HARMONIZAÇÃO FACIAL</a>
+        <a href="#" class="recent-post-link">ALUNOS COMEMORAM RESULTADOS ALCANÇADOS NA APRESENTAÇÃO DE TCCS</a>
+        <a href="#" class="recent-post-link">CURSO DE ANCORAGEM ESQUELÉTICA EXTRA-ALVEOLAR FOI REALIZADO</a>
+        <a href="#" class="recent-post-link">ÚLTIMAS VAGAS PARA A ESPECIALIZAÇÃO EM ORTODONTIA</a>
+      </div>
+    </div>
+
+    <!-- Category -->
+    <div class="widget">
+      <h3 class="widget-title">Categorias</h3>
+      <a href="#" class="cat-link">Notícias (24)</a>
+    </div>
+
+    <!-- Social -->
+    <div class="widget">
+      <h3 class="widget-title">Siga-nos</h3>
+      <div class="social-icons">
+        <a href="#" class="btn-social">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+        </a>
+        <a href="#" class="btn-social">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+
+<div id="bionep-footer-placeholder"></div>
+
+<script>
+/* ── Reveal ──────────────────────────────────────────── */
+const rEls = document.querySelectorAll('.r');
+const rObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on') });
+}, { threshold:.1, rootMargin:'0px 0px -40px 0px' });
+rEls.forEach(el => rObs.observe(el));
+</script>
+<script src="components.js"></script>
+</body>
+</html>

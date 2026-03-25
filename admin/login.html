@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — BIONEP Admin</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet"/>
+
+  <style>
+  :root{
+    --green-950:#003527; --green-700:#006b5f;
+    --gold:#c49a2a; --bg:#001811; --text:#404944;
+    --border: rgba(0,0,0,0.05); --shadow: 0 10px 40px -10px rgba(0,0,0,0.2); 
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;}
+  
+  .login-card { background: white; width: 100%; max-width: 440px; padding: 48px; border-radius: 24px; box-shadow: var(--shadow); position: relative; z-index: 2; }
+  
+  .brand { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 40px; }
+  .brand-logo { width: 64px; height: 64px; }
+  .brand-logo img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0); } /* Turn dark green/black */
+  .brand h1 { font-size: 24px; font-weight: 800; color: var(--green-950); letter-spacing: -0.5px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  label { font-size: 13px; font-weight: 700; color: var(--green-950); }
+  input[type="text"], input[type="password"] {
+    width: 100%; background: #fdfdfd; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px;
+    padding: 16px; font-family: inherit; font-size: 15px; color: var(--green-950);
+    outline: none; transition: border-color .2s;
+  }
+  input:focus { border-color: var(--green-700); }
+
+  .btn-primary { 
+    background: var(--green-700); color: white; width: 100%; padding: 16px; 
+    border-radius: 12px; font-size: 15px; font-weight: 700; border: none; cursor: pointer;
+    transition: all .2s; margin-top: 8px;
+  }
+  .btn-primary:hover { background: var(--green-950); transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(0,107,95,0.3); }
+
+  .back-link { display: block; text-align: center; margin-top: 32px; font-size: 13px; font-weight: 600; color: #a1a1aa; text-decoration: none; transition: color .2s; }
+  .back-link:hover { color: var(--green-700); }
+
+  /* Background Deco */
+  .deco { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 1; opacity: 0.5; }
+  .deco-1 { width: 500px; height: 500px; background: var(--green-700); top: -200px; left: -200px; }
+  .deco-2 { width: 400px; height: 400px; background: var(--gold); bottom: -100px; right: -100px; opacity: 0.2; }
+  </style>
+</head>
+<body>
+
+  <div class="deco deco-1"></div>
+  <div class="deco deco-2"></div>
+
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-logo"><img src="../logo.png" alt="BIONEP"></div>
+      <h1>Painel Administrativo</h1>
+    </div>
+
+    <form onsubmit="event.preventDefault(); fazerLogin();">
+      <div class="form-group">
+        <label>E-mail Corporativo</label>
+        <input type="email" id="email" placeholder="ex: gabriel@bionep.com.br" required />
+      </div>
+      
+      <div class="form-group">
+        <label>Senha Segura</label>
+        <input type="password" id="senha" placeholder="••••••••" required />
+      </div>
+
+      <div id="msg-erro" style="display:none;color:#ef4444;font-size:13px;font-weight:600;margin-bottom:12px;text-align:center;"></div>
+
+      <button type="submit" id="btn-login" class="btn-primary">Acessar Sistema</button>
+    </form>
+
+    <a href="../index.html" class="back-link">← Voltar para o site</a>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+async function fazerLogin() {
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
+  const btnLogin = document.getElementById("btn-login");
+  const msgErro = document.getElementById("msg-erro");
+
+  btnLogin.disabled = true;
+  btnLogin.textContent = "Entrando...";
+  msgErro.style.display = "none";
+
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password: senha });
+
+  if (error) {
+    msgErro.textContent = "E-mail ou senha inválidos. Tente novamente.";
+    msgErro.style.display = "block";
+    btnLogin.disabled = false;
+    btnLogin.textContent = "Acessar Sistema";
+  } else {
+    window.location.href = "index.html";
+  }
+}
+</script>
+</body>
+</html>

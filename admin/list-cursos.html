@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerenciar Cursos — BIONEP Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+  :root{
+    --green-950:#003527; --green-700:#006b5f; --green-mint:rgba(176,240,214,.3);
+    --gold:#c49a2a; --bg:#f4f7f6; --sidebar-bg:#001811; --text:#404944;
+    --border: rgba(0,0,0,0.05); --border-dark: rgba(255,255,255,0.1);
+    --shadow: 0 10px 30px -10px rgba(0,0,0,0.05); --r-box: 16px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;display:flex;height:100vh;overflow:hidden;}
+  a{text-decoration:none;color:inherit} button{border:none;cursor:pointer;}
+
+  .sidebar { width: 280px; background: var(--sidebar-bg); color: rgba(255,255,255,0.7); display: flex; flex-direction: column; padding: 32px 24px; border-right: 1px solid var(--border-dark); flex-shrink: 0;}
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 48px; padding-left: 12px; text-decoration: none;}
+  .brand-logo { width: 40px; height: 40px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 4px; }
+  .brand-logo img { width: 100%; height: 100%; object-fit: contain; filter: grayscale(1); }
+  .brand-text { font-size: 20px; font-weight: 800; color: white; letter-spacing: 1px; }
+
+  .menu-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 16px; padding-left: 12px; color: rgba(255,255,255,0.4); }
+  .menu-group { margin-bottom: 32px; display: flex; flex-direction: column; gap: 8px; }
+  .menu-item { padding: 12px 16px; border-radius: 12px; display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; transition: all .2s; }
+  .menu-item svg { width: 18px; height: 18px; opacity: 0.7; }
+  .menu-item:hover, .menu-item.active { background: rgba(255,255,255,0.06); color: white; }
+  .menu-item.active svg { opacity: 1; color: var(--gold); }
+
+  .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; }
+  .topbar { height: 80px; background: white; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; position: sticky; top: 0; z-index: 10; flex-shrink: 0;}
+  .tb-title { font-size: 20px; font-weight: 800; color: var(--green-950);}
+
+  .workspace { padding: 40px; max-width: 1200px; width: 100%; margin: 0 auto; }
+  .panel { background: white; border: 1px solid var(--border); border-radius: var(--r-box); padding: 32px; box-shadow: var(--shadow); }
+  .panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .panel-title { font-size: 18px; font-weight: 800; color: var(--green-950); }
+  
+  .btn-primary { background: var(--green-700); color: white; font-size: 13px; font-weight: 700; padding: 10px 20px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; transition: background .2s; text-decoration: none;}
+  .btn-primary:hover { background: var(--green-950); }
+
+  .table-w { width: 100%; border-collapse: collapse; }
+  .table-w th { text-align: left; padding: 16px; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #a1a1aa; border-bottom: 1px solid var(--border); }
+  .table-w td { padding: 16px; font-size: 14px; color: var(--green-950); font-weight: 500; border-bottom: 1px solid var(--border); }
+  .table-w tbody tr:hover { background: #fcfcfc; }
+  .table-w td.actions { white-space: nowrap; }
+  .btn-icon { color: #a1a1aa; padding: 6px; border-radius: 6px; transition: all .2s; background: transparent;}
+  .btn-icon:hover { background: var(--green-mint); color: var(--green-700); }
+  .badge-status { padding: 4px 10px; font-size: 11px; font-weight: 700; border-radius: 99px; text-transform: uppercase; }
+  .badge-active { background: rgba(46,172,77,0.15); color: #2eac4d; }
+  .badge-draft  { background: rgba(0,0,0,0.05); color: #a1a1aa; }
+  .empty-msg { text-align:center; padding: 40px; color: #a1a1aa; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <a href="index.html" class="brand">
+      <div class="brand-logo"><img src="../logo.png" alt="BIONEP"></div>
+      <div class="brand-text">BIONEP<span>.</span></div>
+    </a>
+    <div class="menu-lbl">Principal</div>
+    <div class="menu-group">
+      <a href="index.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Visão Geral</a>
+      <a href="list-blog.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Artigos do Blog</a>
+      <a href="list-cursos.html" class="menu-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg> Meus Cursos</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <h2 class="tb-title">Gerenciador de Cursos</h2>
+    </header>
+
+    <div class="workspace">
+      <div class="panel">
+        <div class="panel-head">
+          <h3 class="panel-title">Cursos Cadastrados</h3>
+          <a href="form-curso.html" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Lançar Novo Curso
+          </a>
+        </div>
+        <table class="table-w">
+          <thead>
+            <tr>
+              <th>Curso e Título</th>
+              <th>Coordenador</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-cursos">
+            <tr><td colspan="4" class="empty-msg">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+checkAuth();
+
+async function carregarCursos() {
+  const tbody = document.getElementById("tabela-cursos");
+
+  const { data: cursos, error } = await supabaseClient
+    .from("cursos")
+    .select("id, titulo, categoria, inscricoes_abertas, criado_em")
+    .order("criado_em", { ascending: false });
+
+  if (error) {
+    tbody.innerHTML = `<tr><td colspan="4" class="empty-msg">Erro ao carregar: ${error.message}</td></tr>`;
+    return;
+  }
+
+  if (!cursos || cursos.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" class="empty-msg">Nenhum curso cadastrado ainda.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = cursos.map(c => {
+    const badgeClass = c.inscricoes_abertas ? "badge-active" : "badge-draft";
+    const badgeLabel = c.inscricoes_abertas ? "Inscrições Abertas" : "Encerrado";
+    return `
+      <tr>
+        <td>
+          <div style="font-weight:700;">${c.titulo}</div>
+          <div style="font-size:12px;color:#a1a1aa;margin-top:4px;">${c.categoria || ""}</div>
+        </td>
+        <td>${c.categoria || "—"}</td>
+        <td><span class="badge-status ${badgeClass}">${badgeLabel}</span></td>
+        <td class="actions">
+          <button class="btn-icon" title="Excluir" onclick="excluirCurso('${c.id}')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </td>
+      </tr>`;
+  }).join("");
+}
+
+async function excluirCurso(id) {
+  if (!confirm("Excluir este curso permanentemente?")) return;
+  const { error } = await supabaseClient.from("cursos").delete().eq("id", id);
+  if (error) { alert("Erro ao excluir: " + error.message); return; }
+  carregarCursos();
+}
+
+carregarCursos();
+</script>
+</body>
+</html>

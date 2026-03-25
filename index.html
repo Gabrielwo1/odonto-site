@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BIONEP — Especialização em Ortodontia de Alto Nível</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="global.css"/>
+  <style>
+  /* ─── TOKENS ─────────────────────────────────────────────── */
+  :root{
+    --green-950:#003527;
+    --green-900:#001c11;
+    --green-700:#006b5f;
+    --green-600:#0b513d;
+    --green-mint:rgba(176,240,214,.3);
+    --cyan:#71f8e4;
+    --red:#560f11;
+    --gold:#c49a2a;
+    --gold-soft:rgba(196,154,42,.15);
+    --bg:#f8f9fa;
+    --bg-dark:#1b1913;     /* courses */
+    --bg-bento:#093220;    /* bento contact */
+    --bg-footer:#061710;   /* footer */
+    --text:#404944;
+    --text2:#414944;
+    --icon-bg:#edeef0;
+    --border-green:rgba(6,78,59,.3);
+    --footer-text:rgba(167,243,208,.6);
+    --white:#fff;
+    --shadow-heavy:0 25px 50px -12px rgba(0,0,0,.25);
+    --shadow-light:0 8px 24px 0 rgba(25,28,30,.06);
+    --r-card:12px;
+    --r-pill:9999px;
+    --r-hero:48px;
+  }
+
+  /* ─── RESET ──────────────────────────────────────────────── */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden}
+  a{text-decoration:none;color:inherit}
+  button{border:none;cursor:pointer;font-family:inherit}
+  img{display:block;max-width:100%;object-fit:cover}
+
+  /* ─── SCROLLBAR ─────────────────────────────────────────── */
+  ::-webkit-scrollbar{width:5px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--green-700);border-radius:99px}
+
+  /* ─── LAYOUT ─────────────────────────────────────────────── */
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+
+  /* ─── REVEAL ─────────────────────────────────────────────── */
+  .r{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
+  .r.on{opacity:1;transform:none}
+  .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+  /* ─── WORD-SPLIT REVEAL ──────────────────────────────────── */
+  .split-word{overflow:hidden;display:inline-block;vertical-align:bottom;line-height:inherit;padding:0.2em 0;margin:-0.2em 0}
+  .split-inner{display:inline-block;transform:translateY(130%);transition:transform .8s cubic-bezier(.16,1,.3,1)}
+  .split-word.vis .split-inner{transform:translateY(0)}
+
+  /* ─── SHIMMER — "Alto Nível" ─────────────────────────────── */
+  @keyframes shimmerText{
+    0%  {background-position:200% center}
+    100%{background-position:-200% center}
+  }
+  /* Apply shimmer on split-inner (inline-block) inside .red — background-clip:text works per element */
+  .hero-h1 .red .split-inner{
+    background:linear-gradient(90deg,#560f11 20%,#cc4444 46%,#f09090 52%,#560f11 80%);
+    background-size:300% auto;
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;
+    animation:shimmerText 4s linear infinite;
+  }
+  /* Fallback when not yet split (SSR / JS off) */
+  .hero-h1 .red{color:var(--red)}
+
+  /* ─── BLUR-FADE for hero body ────────────────────────────── */
+  @keyframes blurFadeIn{
+    from{opacity:0;filter:blur(6px);transform:translateY(12px)}
+    to  {opacity:1;filter:blur(0);transform:translateY(0)}
+  }
+  .blur-in{opacity:0}
+  .blur-in.on{animation:blurFadeIn .9s cubic-bezier(.16,1,.3,1) both}
+
+  /* ─── CUSTOM CURSOR ──────────────────────────────────────── */
+  #cur-dot{
+    position:fixed;z-index:9999;width:9px;height:9px;
+    background:var(--green-700);border-radius:50%;
+    pointer-events:none;transform:translate(-50%,-50%);
+    transition:width .2s,height .2s,background .2s,opacity .2s;
+  }
+  #cur-ring{
+    position:fixed;z-index:9998;width:38px;height:38px;
+    border:1.5px solid rgba(0,107,95,.38);border-radius:50%;
+    pointer-events:none;transform:translate(-50%,-50%);
+    transition:width .35s cubic-bezier(.16,1,.3,1),height .35s cubic-bezier(.16,1,.3,1),border-color .2s;
+  }
+  body:has(a:hover) #cur-dot,
+  body:has(button:hover) #cur-dot{width:14px;height:14px;background:var(--cyan)}
+  body:has(a:hover) #cur-ring,
+  body:has(button:hover) #cur-ring{width:54px;height:54px;border-color:rgba(113,248,228,.4)}
+  @media(pointer:coarse){#cur-dot,#cur-ring{display:none}}
+
+  /* ─── HEADING LINE DRAW ──────────────────────────────────── */
+  .line-draw{position:relative;display:inline}
+  .line-draw::after{
+    content:'';position:absolute;bottom:-3px;left:0;
+    width:100%;height:2px;background:var(--green-700);
+    border-radius:1px;transform:scaleX(0);transform-origin:left;
+    transition:transform .7s cubic-bezier(.16,1,.3,1);
+  }
+  .line-draw.drawn::after{transform:scaleX(1)}
+
+  /* ─── MAGNETIC btn override ──────────────────────────────── */
+  .btn-primary,.nav-btn{will-change:transform}
+
+  /* ══════════════════════════════════════════════════════════
+     NAV
+  ══════════════════════════════════════════════════════════ */
+  #nav{
+    position:fixed;top:0;left:0;right:0;z-index:200;
+    background:rgba(248,249,250,.94);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid transparent;
+    height:93px;display:flex;align-items:center;
+    transition:border-color .3s,box-shadow .3s;
+  }
+  #nav.scrolled{border-color:rgba(0,53,39,.12);box-shadow:0 1px 12px rgba(0,0,0,.06)}
+  .nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}
+
+  /* Logo */
+  .nav-logo{display:flex;align-items:flex-start;gap:0;flex-direction:column}
+  .nav-logo-row{display:flex;align-items:center;gap:8px}
+  .nav-logo-bird{width:42px;height:auto}
+  .nav-brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.5px;color:var(--green-950);line-height:1}
+  .nav-sub{font-size:9px;letter-spacing:.5px;color:var(--green-700);font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;margin-top:2px;padding-left:2px}
+
+  /* Links */
+  .nav-links{display:flex;align-items:center;gap:0;list-style:none}
+  .nav-links a{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:13px;letter-spacing:.8px;text-transform:uppercase;
+    color:var(--green-950);padding:6px 18px;position:relative;
+    transition:color .2s;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;bottom:-2px;left:18px;right:18px;
+    height:2px;background:var(--green-950);border-radius:1px;
+    transform:scaleX(0);transition:transform .25s ease;transform-origin:left;
+  }
+  .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+
+  /* Nav CTA */
+  .nav-btn{
+    background:linear-gradient(145deg,#004d39 0%,#003527 100%);
+    color:white;padding:12px 24px;border-radius:var(--r-pill);
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;
+    box-shadow:0 10px 20px -5px rgba(0,53,39,.35);
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .25s,box-shadow .25s;
+    position:relative;white-space:nowrap;
+  }
+  .nav-btn::before{
+    content:'';position:absolute;inset:0;border-radius:inherit;
+    box-shadow:inset 2px 2px 4px 1px rgba(255,255,255,.2),inset -2px -2px 6px 1px rgba(0,0,0,.25);
+    pointer-events:none;
+  }
+  .nav-btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px -5px rgba(0,53,39,.5)}
+
+  /* ══════════════════════════════════════════════════════════
+     HERO
+  ══════════════════════════════════════════════════════════ */
+  #hero{
+    background:var(--bg);padding-top:93px;
+    min-height:100svh;display:flex;align-items:center;
+    position:relative;overflow:hidden;
+  }
+  .hero-grid{
+    max-width:1280px;margin:0 auto;padding:0 32px;width:100%;
+    display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+    min-height:calc(100svh - 93px);padding-top:32px;padding-bottom:32px;
+  }
+
+  /* Hero left */
+  .hero-left{display:flex;flex-direction:column;gap:32px}
+
+  .hero-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--green-mint);
+    border:1px solid rgba(255,255,255,.45);
+    border-radius:var(--r-pill);padding:9px 21px;
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:12px;letter-spacing:1.2px;text-transform:uppercase;
+    color:var(--green-600);backdrop-filter:blur(4px);
+    box-shadow:0 1px 2px rgba(0,0,0,.05);
+    width:fit-content;
+  }
+
+  .hero-h1{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;
+    font-size:clamp(48px,5.6vw,72px);line-height:1;letter-spacing:-1.8px;
+    color:var(--green-950);
+  }
+  .hero-h1 .red{color:var(--red)}
+
+  .hero-body{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:20px;line-height:28px;color:var(--text);
+    max-width:530px;
+  }
+
+  .hero-btns{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+
+  .btn-primary{
+    background:linear-gradient(145deg,#004d39 0%,#003527 100%);
+    color:white;padding:17px 41px;border-radius:var(--r-pill);
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 10px 20px -5px rgba(0,53,39,.3);
+    display:inline-flex;align-items:center;gap:10px;
+    position:relative;transition:transform .25s,box-shadow .25s;
+    cursor:pointer;
+  }
+  .btn-primary::before{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:inset 2px 2px 4px 1px rgba(255,255,255,.2),inset -2px -2px 6px 1px rgba(0,0,0,.25);pointer-events:none}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 32px -5px rgba(0,53,39,.45)}
+
+  .btn-secondary{
+    background:linear-gradient(144deg,#fff 0%,#f1f3f4 100%);
+    color:#191c1d;padding:17px 41px;border-radius:var(--r-pill);
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;
+    border:1px solid rgba(0,0,0,.05);
+    box-shadow:0 8px 16px -4px rgba(0,0,0,.08);
+    display:inline-flex;align-items:center;gap:10px;
+    position:relative;transition:transform .25s,box-shadow .25s;
+    cursor:pointer;
+  }
+  .btn-secondary::before{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:inset 2px 2px 4px 1px white,inset -2px -2px 4px 1px rgba(0,0,0,.05);pointer-events:none}
+  .btn-secondary:hover{transform:translateY(-2px);box-shadow:0 12px 24px -4px rgba(0,0,0,.14)}
+
+  /* Hero stats */
+  .hero-stats{
+    display:flex;gap:40px;align-items:center;
+    border-top:1px solid rgba(191,201,195,.3);
+    padding-top:32px;flex-wrap:wrap;
+  }
+  .hero-stat{display:flex;align-items:center;gap:12px}
+  .hero-stat-num{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;
+    font-size:30px;line-height:36px;color:var(--green-950);
+  }
+  .hero-stat-label{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:12px;letter-spacing:1.2px;text-transform:uppercase;
+    color:var(--text);line-height:15px;
+  }
+  .stat-icon-wrap{
+    width:40px;height:40px;border-radius:50%;
+    background:var(--icon-bg);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+
+  /* Hero right */
+  .hero-right{position:relative;justify-self:end;width:100%}
+  .hero-orb{
+    position:absolute;width:384px;height:384px;border-radius:50%;
+    background:rgba(255,224,136,.2);filter:blur(60px);
+    right:-80px;top:-80px;pointer-events:none;
+    animation:floatOrb 7s ease-in-out infinite;
+  }
+  @keyframes floatOrb{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+
+  .hero-img-card{
+    position:relative;width:100%;
+    background:rgba(255,255,255,.7);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.45);
+    border-radius:var(--r-hero);
+    box-shadow:var(--shadow-heavy);
+    overflow:hidden;aspect-ratio:4/5;
+    transition:transform .4s ease;
+  }
+  .hero-img-card:hover{transform:translateY(-6px)}
+  .hero-img-card > img{
+    width:100%;height:100%;
+    border-radius:calc(var(--r-hero) - 2px);
+  }
+
+  .hero-quote{
+    position:absolute;bottom:40px;left:40px;right:40px;
+    background:rgba(255,255,255,.75);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.55);
+    border-radius:32px;padding:28px 33px;
+    box-shadow:var(--shadow-heavy);
+  }
+  .hero-quote-text{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:16px;line-height:24px;color:var(--green-950);
+    margin-bottom:16px;
+  }
+  .hero-quote-author{display:flex;align-items:center;gap:12px}
+  .hero-quote-avatar{
+    width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;
+    box-shadow:0 1px 2px rgba(0,0,0,.1);
+  }
+  .hero-quote-avatar img{width:100%;height:100%}
+  .hero-quote-name{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:14px;color:var(--green-950);line-height:20px;
+  }
+  .hero-quote-role{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:12px;color:var(--text);line-height:16px;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     COURSES SECTION
+  ══════════════════════════════════════════════════════════ */
+  #courses{background:var(--bg-dark);padding:128px 0 96px}
+
+  .courses-head{
+    max-width:1280px;margin:0 auto;padding:0 32px;
+    display:flex;align-items:flex-end;justify-content:space-between;
+    margin-bottom:64px;gap:24px;
+  }
+  .courses-head-l{max-width:642px}
+  .courses-h2{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;
+    font-size:48px;line-height:1;color:white;margin-bottom:16px;
+  }
+  .courses-desc{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:18px;line-height:28px;color:white;
+  }
+  .courses-head-r{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:12px;letter-spacing:1.2px;text-transform:uppercase;
+    color:rgba(255,255,255,.5);white-space:nowrap;padding-bottom:4px;
+  }
+
+  /* Carousel */
+  .carousel-outer{max-width:1280px;margin:0 auto;padding:0 32px;overflow:hidden}
+  .carousel-track{display:flex;gap:32px;transition:transform .55s cubic-bezier(.4,0,.2,1);will-change:transform}
+
+  /* Course card */
+  .c-card{
+    flex:0 0 calc((100% - 64px)/3);
+    aspect-ratio:3/4;border-radius:var(--r-card);overflow:hidden;
+    position:relative;background:#003322;
+    box-shadow:var(--shadow-heavy);cursor:pointer;
+    transition:transform .3s ease;
+  }
+  .c-card:hover{transform:scale(1.01)}
+  .c-card-img{position:absolute;inset:0;width:100%;height:100%;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+  .c-card:hover .c-card-img{transform:scale(1.06)}
+  .c-card-ov{
+    position:absolute;inset:0;
+    background:linear-gradient(to top,rgba(0,51,34,.95) 0%,rgba(0,51,34,.4) 50%,rgba(0,51,34,.08) 100%);
+    display:flex;flex-direction:column;justify-content:flex-end;padding:32px;
+  }
+  .c-card-label{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;font-size:10px;
+    letter-spacing:4px;text-transform:uppercase;color:var(--cyan);
+    margin-bottom:8px;
+  }
+  .c-card-title{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:28px;line-height:34px;letter-spacing:1px;
+    text-transform:uppercase;color:white;margin-bottom:24px;
+  }
+  .c-card-foot{display:flex;align-items:center;justify-content:space-between}
+  .btn-card{
+    background:var(--green-700);color:white;
+    padding:12px 32px;border-radius:var(--r-pill);
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;
+    letter-spacing:1.2px;text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:8px;
+    box-shadow:0 10px 15px -3px rgba(0,0,0,.2),0 4px 6px -4px rgba(0,0,0,.2);
+    transition:background .2s,transform .2s;
+  }
+  .btn-card:hover{background:#008375;transform:translateY(-1px)}
+  .c-open{
+    display:flex;align-items:center;gap:8px;
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:10px;letter-spacing:1px;text-transform:uppercase;
+    color:var(--cyan);
+  }
+  .c-open-dot{
+    width:8px;height:8px;border-radius:50%;background:var(--cyan);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* Dots */
+  .carousel-dots{
+    display:flex;gap:16px;align-items:center;justify-content:center;
+    margin-top:64px;
+  }
+  .cdot{
+    border-radius:99px;cursor:pointer;
+    background:rgba(255,255,255,.35);
+    transition:background .3s,width .3s;
+    height:6px;width:16px;
+  }
+  .cdot.active{background:white;width:48px}
+
+  /* ══════════════════════════════════════════════════════════
+     STRUCTURE SECTION
+  ══════════════════════════════════════════════════════════ */
+  #structure{background:white;padding:92px 0}
+  .structure-grid{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:96px;align-items:center;
+  }
+
+  /* Left */
+  .struct-img-wrap{position:relative}
+  .struct-orb{
+    position:absolute;width:256px;height:256px;border-radius:50%;
+    background:rgba(0,107,95,.1);filter:blur(50px);
+    bottom:-40px;left:-40px;pointer-events:none;
+  }
+  .struct-img-frame{
+    border-radius:var(--r-card);overflow:hidden;
+    border:1px solid rgba(0,0,0,.06);
+    box-shadow:0 20px 60px -10px rgba(0,0,0,.2),
+               12px 12px 0 0 rgba(0,53,39,.06);
+    position:relative;transition:transform .4s,box-shadow .4s;
+  }
+  .struct-img-frame:hover{
+    transform:translateY(-6px);
+    box-shadow:0 40px 80px -10px rgba(0,0,0,.2),12px 12px 0 0 rgba(0,53,39,.1);
+  }
+  .struct-img-frame img{width:100%;height:440px;display:block}
+
+  .struct-badge{
+    position:absolute;top:-40px;right:-40px;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.6);
+    border-radius:16px;padding:24px;
+    box-shadow:0 20px 40px -8px rgba(0,0,0,.18);
+    display:flex;align-items:center;gap:16px;min-width:230px;
+    animation:floatBadge 4.5s ease-in-out infinite;
+  }
+  @keyframes floatBadge{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  .struct-badge-icon{
+    width:48px;height:48px;border-radius:12px;
+    background:rgba(0,107,95,.12);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .struct-badge-title{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:13px;color:var(--green-950);line-height:18px;
+  }
+  .struct-badge-sub{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:12px;color:var(--text);line-height:16px;margin-top:2px;
+  }
+
+  /* Right */
+  .struct-h2{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;
+    font-size:40px;line-height:48px;color:var(--green-950);
+    margin-bottom:24px;
+  }
+  .struct-desc{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:18px;line-height:28px;color:var(--text);
+    margin-bottom:40px;
+  }
+  .struct-list{list-style:none;display:flex;flex-direction:column;margin-bottom:48px}
+  .struct-item{
+    display:flex;gap:20px;align-items:flex-start;
+    padding:20px 0;
+    border-bottom:1px solid rgba(191,201,195,.2);
+    transition:padding-left .25s ease;
+  }
+  .struct-item:first-child{padding-top:0}
+  .struct-item:last-child{border-bottom:none}
+  .struct-item:hover{padding-left:6px}
+  .struct-item-icon{
+    width:34px;height:34px;border-radius:50%;
+    background:var(--gold-soft);
+    border:1.5px solid rgba(196,154,42,.35);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;margin-top:4px;
+    transition:background .25s;
+  }
+  .struct-item:hover .struct-item-icon{background:rgba(196,154,42,.25)}
+  .struct-item-title{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:18px;line-height:28px;color:var(--green-950);
+    margin-bottom:4px;
+  }
+  .struct-item-desc{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:15px;line-height:24px;color:var(--text);
+  }
+
+  .btn-cta{
+    display:inline-flex;align-items:center;gap:12px;
+    background:linear-gradient(145deg,#004d39 0%,#003527 100%);
+    color:white;padding:21px 41px;border-radius:var(--r-pill);
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;
+    box-shadow:0 10px 20px -5px rgba(0,53,39,.3);
+    border:1px solid rgba(255,255,255,.1);
+    transition:transform .25s,box-shadow .25s;
+    position:relative;cursor:pointer;
+  }
+  .btn-cta::before{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:inset 2px 2px 4px rgba(255,255,255,.18),inset -2px -2px 6px rgba(0,0,0,.25);pointer-events:none}
+  .btn-cta:hover{transform:translateY(-2px);box-shadow:0 18px 36px -5px rgba(0,53,39,.45)}
+
+  /* ══════════════════════════════════════════════════════════
+     INFRASTRUCTURE SECTION
+  ══════════════════════════════════════════════════════════ */
+  #infra{background:var(--bg);padding:96px 0}
+  .infra-head{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    margin-bottom:64px;gap:32px;
+  }
+  .infra-head-l{max-width:655px}
+  .infra-label{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;
+    letter-spacing:2.4px;text-transform:uppercase;color:var(--green-700);
+    margin-bottom:16px;
+  }
+  .infra-h2{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;
+    font-size:48px;line-height:52px;color:var(--green-900);
+    margin-bottom:16px;
+  }
+  .infra-h2 em{font-style:italic}
+  .infra-desc{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:18px;line-height:28px;color:var(--text2);
+  }
+  .infra-arrows{display:flex;gap:16px;padding-bottom:6px}
+  .arrow-btn{
+    width:48px;height:48px;border-radius:50%;
+    border:1px solid #c0c8c2;background:transparent;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:all .25s;
+  }
+  .arrow-btn svg path{transition:stroke .25s}
+  .arrow-btn:hover{background:var(--green-950);border-color:var(--green-950)}
+  .arrow-btn:hover svg path{stroke:white}
+
+  /* Infra carousel */
+  .infra-outer{overflow:hidden}
+  .infra-track{display:flex;gap:32px;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+  .infra-slide{flex:0 0 100%;display:grid;grid-template-columns:2fr 1fr;gap:32px}
+  .infra-img-big,.infra-img-sm{
+    border-radius:var(--r-card);overflow:hidden;
+    box-shadow:var(--shadow-heavy);position:relative;
+    transition:transform .35s ease;
+  }
+  .infra-img-big{aspect-ratio:16/9}
+  .infra-img-sm{aspect-ratio:1}
+  .infra-img-big:hover,.infra-img-sm:hover{transform:scale(1.01)}
+  .infra-img-big img,.infra-img-sm img{width:100%;height:100%}
+  .infra-caption{
+    position:absolute;bottom:0;left:0;right:0;padding:24px 32px;
+    background:linear-gradient(to top,rgba(0,28,17,.65) 0%,transparent 100%);
+  }
+  .infra-caption span{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:16px;color:white;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     BENTO CONTACT
+  ══════════════════════════════════════════════════════════ */
+  #contact{background:var(--bg-bento);padding:96px 0}
+  .bento-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  }
+  .bento-card{
+    background:white;border-radius:16px;
+    padding:32px;min-height:232px;
+    position:relative;overflow:hidden;
+    transition:transform .3s,box-shadow .3s;
+    box-shadow:var(--shadow-light);
+  }
+  .bento-card::after{
+    content:'';position:absolute;inset:0;border-radius:inherit;
+    border:1.5px solid transparent;
+    transition:border-color .3s;
+  }
+  .bento-card:hover{transform:translateY(-5px);box-shadow:0 24px 48px rgba(0,0,0,.2)}
+  .bento-card:hover::after{border-color:rgba(0,107,95,.2)}
+  .bento-icon{
+    width:48px;height:48px;border-radius:50%;
+    background:var(--icon-bg);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:40px;transition:background .3s;
+  }
+  .bento-card:hover .bento-icon{background:rgba(0,107,95,.15)}
+  .bento-title{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;
+    font-size:24px;line-height:32px;color:#003322;
+    margin-bottom:12px;
+  }
+  .bento-text{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:16px;line-height:26px;color:var(--text2);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     INSIGHTS / BLOG
+  ══════════════════════════════════════════════════════════ */
+  #insights{background:var(--bg);padding:96px 0}
+  .insights-head{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:56px;
+  }
+  .insights-h2{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:40px;line-height:44px;color:var(--green-900);
+  }
+  .insights-link{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:14px;color:var(--green-700);
+    display:flex;align-items:center;gap:6px;
+    border-bottom:1px solid var(--green-700);padding-bottom:2px;
+    transition:gap .2s;
+  }
+  .insights-link:hover{gap:10px}
+
+  .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+  .blog-card{
+    border-radius:16px;overflow:hidden;
+    background:white;
+    box-shadow:0 2px 16px rgba(25,28,30,.05);
+    border:1px solid rgba(0,0,0,.05);
+    cursor:pointer;
+    transition:transform .35s,box-shadow .35s;
+    display:flex;flex-direction:column;
+  }
+  .blog-card:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(25,28,30,.1)}
+  .blog-img-wrap{overflow:hidden;flex-shrink:0}
+  .blog-img{width:100%;height:215px;display:block;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+  .blog-card:hover .blog-img{transform:scale(1.05)}
+  .blog-body{padding:40px;flex:1;display:flex;flex-direction:column}
+  .blog-cat{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:11px;letter-spacing:1.2px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:12px;
+  }
+  .blog-title{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;
+    font-size:20px;line-height:28px;color:var(--green-900);
+    margin-bottom:12px;
+  }
+  .blog-desc{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:14px;line-height:22px;color:var(--text);
+    margin-bottom:24px;flex:1;
+  }
+  .blog-link{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:14px;color:var(--green-700);
+    transition:gap .2s;
+  }
+  .blog-link:hover{gap:10px}
+
+  /* ══════════════════════════════════════════════════════════
+     MAP / ESTRUTURA DE PONTA
+  ══════════════════════════════════════════════════════════ */
+  #mapctx{background:white;padding:80px 0}
+  .map-grid{display:grid;grid-template-columns:1.45fr 1fr;gap:64px;align-items:center}
+  .map-img-wrap{position:relative;border-radius:var(--r-card);overflow:hidden;box-shadow:var(--shadow-heavy);aspect-ratio:16/10}
+  .map-img-wrap img{width:100%;height:100%}
+  .map-img-ov{position:absolute;inset:0;background:rgba(0,28,17,.06);border-radius:var(--r-card)}
+  .map-pin{
+    position:absolute;bottom:24px;left:24px;
+    background:rgba(255,255,255,.88);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.65);
+    border-radius:12px;padding:18px 22px;
+    display:flex;align-items:center;gap:14px;
+    box-shadow:0 8px 24px rgba(0,0,0,.15);
+  }
+  .map-pin-icon{
+    width:40px;height:40px;background:rgba(0,107,95,.12);
+    border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .map-pin-label{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:13px;color:var(--green-950);line-height:16px;
+  }
+  .map-pin-sub{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:12px;color:var(--text);line-height:18px;margin-top:2px;
+  }
+
+  /* Map right */
+  .map-h2{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:40px;line-height:44px;color:var(--green-900);
+    margin-bottom:24px;
+  }
+  .map-desc{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:16px;line-height:26px;color:var(--text);
+    margin-bottom:32px;
+  }
+  .map-features{display:flex;flex-direction:column;margin-bottom:40px}
+  .map-feat{
+    display:flex;gap:18px;align-items:flex-start;
+    padding:20px 0;
+    border-bottom:1px solid rgba(191,201,195,.25);
+  }
+  .map-feat:first-child{border-top:1px solid rgba(191,201,195,.25)}
+  .map-feat-icon{
+    width:20px;flex-shrink:0;display:flex;justify-content:center;margin-top:3px;
+  }
+  .map-feat-title{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:16px;line-height:24px;color:var(--green-950);margin-bottom:2px;
+  }
+  .map-feat-sub{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:14px;line-height:20px;color:var(--text);
+  }
+  .btn-whatsapp{
+    width:100%;padding:18px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    background:linear-gradient(145deg,#004d39 0%,#003527 100%);
+    color:white;border-radius:var(--r-pill);
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;
+    box-shadow:0 10px 20px -5px rgba(0,53,39,.3);
+    border:none;cursor:pointer;position:relative;
+    transition:transform .25s,box-shadow .25s;
+  }
+  .btn-whatsapp::before{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:inset 2px 2px 4px rgba(255,255,255,.18),inset -2px -2px 6px rgba(0,0,0,.25);pointer-events:none}
+  .btn-whatsapp:hover{transform:translateY(-2px);box-shadow:0 18px 36px -5px rgba(0,53,39,.45)}
+
+  /* ══════════════════════════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════════════════════════ */
+  #footer{background:var(--bg-footer);padding:80px 0 0}
+  .footer-top{
+    display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:48px;
+    border-bottom:1px solid var(--border-green);
+    padding-bottom:56px;margin-bottom:0;
+  }
+  .footer-logo{margin-bottom:20px;display:flex;align-items:center;gap:8px}
+  .footer-logo-icon{width:36px;height:auto;filter:brightness(0) invert(1);opacity:.9}
+  .footer-brand{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;
+    font-size:18px;color:white;letter-spacing:-.3px;
+  }
+  .footer-brand-sub{
+    font-size:9px;letter-spacing:.4px;color:var(--footer-text);
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    display:block;margin-top:1px;
+  }
+  .footer-desc{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:14px;line-height:22px;color:var(--footer-text);
+    max-width:268px;
+  }
+  .footer-col-title{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:11px;letter-spacing:1.2px;text-transform:uppercase;
+    color:rgba(167,243,208,.5);margin-bottom:24px;
+  }
+  .footer-links{list-style:none;display:flex;flex-direction:column;gap:14px}
+  .footer-links a{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:15px;color:var(--footer-text);
+    transition:color .2s;
+  }
+  .footer-links a:hover{color:white}
+
+  .footer-bottom{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 0;flex-wrap:wrap;gap:12px;
+  }
+  .footer-copy{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:13px;color:rgba(167,243,208,.3);
+  }
+  .footer-right{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    font-size:13px;color:rgba(167,243,208,.3);
+    display:flex;align-items:center;gap:24px;
+  }
+  .footer-right span::before{content:'•';margin-right:24px;color:rgba(167,243,208,.2)}
+
+  /* ─── RESPONSIVE ─────────────────────────────────────────── */
+  @media(max-width:1100px){
+    .footer-top{grid-template-columns:1fr 1fr}
+    .bento-grid{grid-template-columns:1fr 1fr}
+    .infra-slide{grid-template-columns:1fr}
+    .infra-img-sm{display:none}
+  }
+  @media(max-width:820px){
+    .nav-links,.nav-btn{display:none}
+    .hero-grid{grid-template-columns:1fr}
+    .hero-right{display:none}
+    .hero-h1{font-size:44px}
+    .structure-grid,.map-grid{grid-template-columns:1fr}
+    .blog-grid{grid-template-columns:1fr}
+    .bento-grid{grid-template-columns:1fr 1fr}
+    .courses-head{flex-direction:column;align-items:flex-start}
+    .c-card{flex:0 0 88%}
+    .struct-badge{display:none}
+    .infra-head{flex-direction:column;align-items:flex-start}
+    .courses-h2{font-size:36px}
+  }
+  @media(max-width:480px){
+    .bento-grid{grid-template-columns:1fr}
+    .hero-stats{flex-direction:column;align-items:flex-start;gap:16px}
+    .hero-btns{flex-direction:column;align-items:stretch}
+    .hero-h1{font-size:38px;letter-spacing:-1px}
+    .wrap{padding:0 20px}
+  }
+  </style>
+</head>
+<body>
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     NAV
+══════════════════════════════════════════════════════════ -->
+<div id="bionep-nav-placeholder"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-grid">
+
+    <!-- Left -->
+    <div class="hero-left">
+      <div class="hero-tag r">
+        <svg width="11" height="14" viewBox="0 0 11 14" fill="none">
+          <path d="M5.5 1C3.3 1 1.5 2.8 1.5 5c0 1.5.8 2.9 2 3.7V10.5a2 2 0 004 0V8.7c1.2-.8 2-2.2 2-3.7C9.5 2.8 7.7 1 5.5 1z" fill="#0b513d"/>
+        </svg>
+        Educação Odontológica de Elite
+      </div>
+
+      <h1 class="hero-h1 r d1">
+        Especialização<br/>
+        em Ortodontia<br/>
+        de <span class="red">Alto Nível</span>
+      </h1>
+
+      <p class="hero-body r d2 blur-in">
+        Coordenação com especialistas renomados e estrutura completa para sua evolução profissional. Onde a ciência encontra a excelência clínica.
+      </p>
+
+      <div class="hero-btns r d3">
+        <a href="#courses" class="btn-primary">
+          Quero me especializar
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3.5l3 3-3 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#courses" class="btn-secondary">
+          Ver cursos disponíveis
+        </a>
+      </div>
+
+      <div class="hero-stats r d4">
+        <div class="hero-stat">
+          <div class="hero-stat-num" data-count="15" data-suffix="+">15+</div>
+          <div class="hero-stat-label">Anos de<br/>Experiência</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-icon-wrap">
+            <svg width="22" height="21" viewBox="0 0 22 21" fill="none"><path d="M11 1.5l2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.7-5 2.7 1-5.6-4.1-4 5.6-.8L11 1.5z" fill="var(--gold)" opacity=".6" stroke="var(--gold)" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="hero-stat-label">Certificado<br/>pelo MEC</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="4" fill="var(--green-700)" opacity=".5" stroke="var(--green-700)" stroke-width="1.5"/><path d="M3 20c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="hero-stat-label">Mentoria<br/>Individual</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: glassmorphism card -->
+    <div class="hero-right r d2">
+      <div class="hero-orb"></div>
+      <div class="hero-img-card">
+        <img src="especialistas.png?v=3"
+             alt="Especialistas em Ortodontia"/>
+        <div class="hero-quote">
+          <p class="hero-quote-text">"A excelência não é um ato, mas um hábito."</p>
+          <div class="hero-quote-author">
+            <div class="hero-quote-avatar">
+              <img src="https://www.figma.com/api/mcp/asset/fad752b7-b7d7-4cf0-9690-6989690da346"
+                   alt="Dr. Henrique Silva"/>
+            </div>
+            <div>
+              <div class="hero-quote-name">Dr. Henrique Silva</div>
+              <div class="hero-quote-role">Coordenador Acadêmico</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     COURSES
+══════════════════════════════════════════════════════════ -->
+<section id="courses">
+  <div class="courses-head">
+    <div class="courses-head-l r">
+      <h2 class="courses-h2">Cursos de <span class="line-draw">Especialização</span></h2>
+      <p class="courses-desc">Programas intensivos desenhados para profissionais que buscam o domínio<br/>técnico e clínico em áreas estratégicas.</p>
+    </div>
+    <div class="courses-head-r r d2">Explore nossa grade curricular</div>
+  </div>
+
+  <!-- Carousel -->
+  <div class="carousel-outer" id="coursesOuter">
+    <div class="carousel-track" id="coursesTrack">
+
+      <div class="c-card">
+        <img class="c-card-img"
+             src="card1.png"
+             alt="Endodontia"/>
+        <div class="c-card-ov">
+          <p class="c-card-label">Especialização</p>
+          <h3 class="c-card-title">ENDODONTIA</h3>
+          <div class="c-card-foot">
+            <button class="btn-card">
+              Saiba Mais
+              <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="c-open"><span class="c-open-dot"></span>Inscrições Abertas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-card">
+        <img class="c-card-img"
+             src="https://www.figma.com/api/mcp/asset/cac9872f-6d17-445c-b7f3-ddd38f0e99e7"
+             alt="Harmonização Orofacial"/>
+        <div class="c-card-ov">
+          <p class="c-card-label">Especialização</p>
+          <h3 class="c-card-title">HARMONIZAÇÃO<br/>OROFACIAL</h3>
+          <div class="c-card-foot">
+            <button class="btn-card">
+              Saiba Mais
+              <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="c-open"><span class="c-open-dot"></span>Inscrições Abertas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-card">
+        <img class="c-card-img"
+             src="card3.png"
+             alt="Orthodontia"/>
+        <div class="c-card-ov">
+          <p class="c-card-label">Especialização</p>
+          <h3 class="c-card-title">ORTHODONTIA</h3>
+          <div class="c-card-foot">
+            <button class="btn-card">
+              Saiba Mais
+              <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="c-open"><span class="c-open-dot"></span>Inscrições Abertas</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Dots -->
+  <div class="carousel-dots" id="cdots">
+    <div class="cdot active" data-i="0"></div>
+    <div class="cdot" data-i="1"></div>
+    <div class="cdot" data-i="2"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     STRUCTURE
+══════════════════════════════════════════════════════════ -->
+<section id="structure">
+  <div class="wrap">
+    <div class="structure-grid">
+
+      <!-- Left: image -->
+      <div class="struct-img-wrap r">
+        <div class="struct-orb"></div>
+        <div class="struct-img-frame">
+          <img src="campus.png"
+               alt="Campus BIONEP"/>
+        </div>
+        <!-- Floating badge -->
+        <div class="struct-badge">
+          <div class="struct-badge-icon">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <rect x="3" y="3" width="7" height="7" rx="1.5" fill="var(--green-700)"/>
+              <rect x="12" y="3" width="7" height="7" rx="1.5" fill="var(--green-700)" opacity=".4"/>
+              <rect x="3" y="12" width="7" height="7" rx="1.5" fill="var(--green-700)" opacity=".4"/>
+              <rect x="12" y="12" width="7" height="7" rx="1.5" fill="var(--green-700)" opacity=".7"/>
+            </svg>
+          </div>
+          <div>
+            <div class="struct-badge-title">Tecnologia Digital</div>
+            <div class="struct-badge-sub">Scanner 3D &amp; Itero</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: text -->
+      <div class="r d2">
+        <h2 class="struct-h2">Estrutura completa<br/>para sua <span class="line-draw">formação</span></h2>
+        <p class="struct-desc">Nosso campus foi projetado para simular o ambiente clínico de alta performance. Oferecemos aos alunos acesso direto às tecnologias que estão definindo o futuro da odontologia.</p>
+        <ul class="struct-list">
+          <li class="struct-item">
+            <div class="struct-item-icon">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                <path d="M3 7.5l3 3 6-6" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="struct-item-title">Clínicas equipadas</div>
+              <p class="struct-item-desc">Box individuais com tecnologia de última geração para prática em pacientes reais.</p>
+            </div>
+          </li>
+          <li class="struct-item">
+            <div class="struct-item-icon">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                <path d="M3 7.5l3 3 6-6" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="struct-item-title">Laboratórios modernos</div>
+              <p class="struct-item-desc">Espaços dedicados para prototipagem digital, escaneamento e simulação clínica.</p>
+            </div>
+          </li>
+          <li class="struct-item">
+            <div class="struct-item-icon">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                <path d="M3 7.5l3 3 6-6" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="struct-item-title">Corpo docente de elite</div>
+              <p class="struct-item-desc">Mestres e doutores com atuação destacada nos maiores centros mundiais.</p>
+            </div>
+          </li>
+        </ul>
+        <a href="#mapctx" class="btn-cta">
+          Conheça nossa estrutura
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="11" rx="1.5" stroke="white" stroke-width="1.4"/><path d="M6 4V3a3 3 0 016 0v1" stroke="white" stroke-width="1.4" stroke-linecap="round"/><circle cx="9" cy="9.5" r="1.5" fill="white"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     INFRASTRUCTURE
+══════════════════════════════════════════════════════════ -->
+<section id="infra">
+  <div class="wrap">
+
+    <div class="infra-head">
+      <div class="infra-head-l r">
+        <p class="infra-label">Infraestrutura</p>
+        <h2 class="infra-h2">Projetado para a <em>prática</em><br/><em>avançada.</em></h2>
+        <p class="infra-desc">Modernas clínicas e laboratórios planejados para excelência, equipados com as tecnologias mais recentes do mercado odontológico.</p>
+      </div>
+      <div class="infra-arrows r d2">
+        <button class="arrow-btn" id="infra-prev" aria-label="Anterior">
+          <svg width="8" height="12" viewBox="0 0 8 12" fill="none"><path d="M6.5 1L1.5 6l5 5" stroke="#414944" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="arrow-btn" id="infra-next" aria-label="Próximo">
+          <svg width="8" height="12" viewBox="0 0 8 12" fill="none"><path d="M1.5 1l5 5-5 5" stroke="#414944" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="infra-outer" id="infraOuter">
+      <div class="infra-track" id="infraTrack">
+
+        <!-- Slide 1 -->
+        <div class="infra-slide">
+          <div class="infra-img-big r">
+            <img src="https://www.figma.com/api/mcp/asset/7668372b-235a-437a-a8a5-ce315e743d35"
+                 alt="Clínica Odontológica BIONEP"/>
+            <div class="infra-caption"><span>Clínica Odontológica</span></div>
+          </div>
+          <div class="infra-img-sm r d2">
+            <img src="https://www.figma.com/api/mcp/asset/a5c29ccb-f267-4d82-9166-60dff5af31f4"
+                 alt="Campus BIONEP"/>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="infra-slide">
+          <div class="infra-img-big">
+            <img src="https://www.figma.com/api/mcp/asset/ea1e970c-20e0-4006-9c86-c55b34aa415a"
+                 alt="Laboratório Digital"/>
+            <div class="infra-caption"><span>Laboratório Digital</span></div>
+          </div>
+          <div class="infra-img-sm">
+            <img src="campus.png"
+                 alt="Estrutura"/>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     BENTO CONTACT
+══════════════════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="bento-grid">
+
+      <div class="bento-card r">
+        <div class="bento-icon">
+          <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
+            <path d="M8 1C4.7 1 2 3.7 2 7c0 4.7 6 12 6 12s6-7.3 6-12c0-3.3-2.7-6-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z" fill="#414944"/>
+          </svg>
+        </div>
+        <h3 class="bento-title">CAMPUS</h3>
+        <p class="bento-text">Pedro Ramires de Melo, 474.<br/>Pato Branco PR.</p>
+      </div>
+
+      <div class="bento-card r d1">
+        <div class="bento-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M16 12.5c0 .4-.1.8-.2 1.2s-.4.7-.7 1c-.5.5-1.1.8-1.8.8-.5 0-1-.1-1.5-.4-1.5-.8-2.9-1.8-4.1-3.1-1.2-1.2-2.3-2.6-3.1-4.1-.3-.5-.4-1-.4-1.5 0-.7.3-1.3.7-1.8.4-.4.9-.6 1.4-.6.2 0 .4 0 .6.1.2.1.4.2.5.4l1.7 2.4c.1.2.2.3.3.5 0 .2.1.3.1.5 0 .2-.1.4-.2.6l-.5.5c0 .1 0 .1-.1.2 0 .1 0 .1.1.2.2.4.5.7.8 1 .3.3.7.6 1.1.9.1 0 .1.1.2.1.1 0 .1 0 .2-.1l.5-.5c.2-.2.4-.3.6-.4.2-.1.4-.1.5-.1.2 0 .4 0 .5.1.2.1.4.2.5.3l2.4 1.7c.2.1.3.3.4.5.1.2.1.4.1.5z" fill="#414944"/>
+          </svg>
+        </div>
+        <h3 class="bento-title">FONE</h3>
+        <p class="bento-text">46 3224 2553<br/>46 9 9938 9997</p>
+      </div>
+
+      <div class="bento-card r d2">
+        <div class="bento-icon">
+          <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+            <rect x="1" y="1" width="18" height="14" rx="2" stroke="#414944" stroke-width="1.4"/>
+            <path d="M1 4l9 5.5L19 4" stroke="#414944" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="bento-title">E-MAIL</h3>
+        <p class="bento-text">contato@bionep.com.br</p>
+      </div>
+
+      <div class="bento-card r d3">
+        <div class="bento-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8.5" stroke="#414944" stroke-width="1.4"/>
+            <path d="M10 5.5V10l3 2" stroke="#414944" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="bento-title">ATENDIMENTO</h3>
+        <p class="bento-text">09:00 h - 12:00 h<br/>13:30 h - 18:30 h</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     INSIGHTS
+══════════════════════════════════════════════════════════ -->
+<section id="insights">
+  <div class="wrap">
+
+    <div class="insights-head r">
+      <h2 class="insights-h2">Insights &amp; <span class="line-draw">Conhecimento</span></h2>
+      <a href="#" class="insights-link">
+        Ver todos os artigos
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 2.5l3.5 3.5L7 9.5" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <div class="blog-grid">
+
+      <div class="blog-card r">
+        <div class="blog-img-wrap">
+          <img class="blog-img"
+               src="https://www.figma.com/api/mcp/asset/e6690a03-d414-4fc3-ab9f-8dee04d61112"
+               alt="Scanner intraoral"/>
+        </div>
+        <div class="blog-body">
+          <p class="blog-cat">Inovação Digital</p>
+          <h3 class="blog-title">O futuro do escaneamento intraoral</h3>
+          <p class="blog-desc">Como a tecnologia digital está otimizando o fluxo de trabalho e o conforto do paciente.</p>
+          <a href="#" class="blog-link">
+            Ler mais
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8.5 3.5l4 3.5-4 3.5" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="8" y="5.5" width="1" height="3" rx=".5" fill="var(--green-700)" opacity="0"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="blog-card r d1">
+        <div class="blog-img-wrap">
+          <img class="blog-img"
+               src="https://www.figma.com/api/mcp/asset/365bd5ee-10fb-4a28-8a92-5bcde8747619"
+               alt="Alinhadores"/>
+        </div>
+        <div class="blog-body">
+          <p class="blog-cat">Ortodontia</p>
+          <h3 class="blog-title">Alinhadores para casos complexos</h3>
+          <p class="blog-desc">Desmistificando os limites dos alinhadores e o planejamento biomecânico avançado.</p>
+          <a href="#" class="blog-link">
+            Ler mais
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8.5 3.5l4 3.5-4 3.5" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="blog-card r d2">
+        <div class="blog-img-wrap">
+          <img class="blog-img"
+               src="https://www.figma.com/api/mcp/asset/e44e2b3c-12d4-428f-b410-dc91ae526744"
+               alt="Branding clínico"/>
+        </div>
+        <div class="blog-body">
+          <p class="blog-cat">Gestão</p>
+          <h3 class="blog-title">Branding para consultórios de elite</h3>
+          <p class="blog-desc">Por que o posicionamento de marca é vital para atrair pacientes de alto ticket.</p>
+          <a href="#" class="blog-link">
+            Ler mais
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8.5 3.5l4 3.5-4 3.5" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     MAP / ESTRUTURA DE PONTA
+══════════════════════════════════════════════════════════ -->
+<section id="mapctx">
+  <div class="wrap">
+    <div class="map-grid">
+
+      <!-- Left: image -->
+      <div class="map-img-wrap r">
+        <img src="map-campus.png"
+             alt="Campus BIONEP — Pato Branco"/>
+        <div class="map-img-ov"></div>
+        <div class="map-pin">
+          <div class="map-pin-icon">
+            <svg width="20" height="22" viewBox="0 0 20 22" fill="none">
+              <rect x="2" y="14" width="16" height="3" rx="1.5" fill="var(--green-700)" opacity=".3"/>
+              <path d="M6 8h8M10 4v10" stroke="var(--green-700)" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="map-pin-label">COMO CHEGAR</div>
+            <div class="map-pin-sub">Fácil acesso via transporte público</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right -->
+      <div class="r d2">
+        <h2 class="map-h2">Estrutura de <span class="line-draw">Ponta</span></h2>
+        <p class="map-desc">Localizada no coração de Pato Branco, a BIONEP oferece um campus moderno com laboratórios de última geração e clínicas integradas para o melhor aproveitamento prático dos nossos alunos.</p>
+        <div class="map-features">
+          <div class="map-feat">
+            <div class="map-feat-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="8" stroke="var(--green-700)" stroke-width="1.4" opacity=".6"/>
+                <path d="M7 10l2 2 4-4" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="map-feat-title">Estacionamento Próprio</div>
+              <div class="map-feat-sub">Vagas exclusivas para alunos e visitantes em nossa sede.</div>
+            </div>
+          </div>
+          <div class="map-feat">
+            <div class="map-feat-icon">
+              <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+                <path d="M1 4c5-5 13-5 18 0" stroke="var(--green-700)" stroke-width="1.4" stroke-linecap="round" opacity=".4"/>
+                <path d="M4 7.5c3.3-3.3 8.7-3.3 12 0" stroke="var(--green-700)" stroke-width="1.4" stroke-linecap="round" opacity=".65"/>
+                <path d="M7 11c1.7-1.7 5.3-1.7 6 0" stroke="var(--green-700)" stroke-width="1.4" stroke-linecap="round" opacity=".85"/>
+                <circle cx="10" cy="14" r="1.5" fill="var(--green-700)"/>
+              </svg>
+            </div>
+            <div>
+              <div class="map-feat-title">Wi-Fi High Speed</div>
+              <div class="map-feat-sub">Conectividade total em todas as áreas de estudo e convívio.</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-whatsapp" onclick="window.open('https://wa.me/554632242553','_blank')">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M17.2 2.8A9.8 9.8 0 002.3 14.7L1 19l4.4-1.2A9.8 9.8 0 0019 10c0-2.6-1-5-2.8-7.2z" fill="white" opacity=".9"/>
+            <path d="M7.5 6c-.2-.5-.5-.5-.7-.5-.2 0-.4 0-.6.1-.2 0-.5.2-.7.5-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.2 3 .2.3 2 3.1 4.8 4.3.7.3 1.2.4 1.6.5.7.1 1.3.1 1.8 0 .5-.1 1.7-.7 1.9-1.4.2-.6.2-1.2.1-1.3-.1-.1-.3-.2-.6-.3" stroke="#003527" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          Iniciar Chat via WhatsApp
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3.5l3 3-3 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════ -->
+<div id="bionep-footer-placeholder"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════════ -->
+<script>
+/* ── Reveal ──────────────────────────────────────────── */
+const rEls = document.querySelectorAll('.r');
+const rObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on') });
+}, { threshold:.1, rootMargin:'0px 0px -40px 0px' });
+rEls.forEach(el => rObs.observe(el));
+
+/* ── Nav scroll ──────────────────────────────────────── */
+const nav_el = document.getElementById('nav');
+if(nav_el){ addEventListener('scroll', () => nav_el.classList.toggle('scrolled', scrollY > 20)); }
+
+/* ── Nav active link ─────────────────────────────────── */
+const navLinks = document.querySelectorAll('.nav-links a');
+const sections = document.querySelectorAll('section[id]');
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href')==='#'+e.target.id));
+    }
+  });
+}, { threshold:.4 }).observe(document.getElementById('courses'));
+
+/* ── COURSES CAROUSEL — infinite autoplay ─────────────── */
+(function(){
+  const outer  = document.getElementById('coursesOuter');
+  const track  = document.getElementById('coursesTrack');
+  const dots   = [...document.querySelectorAll('.cdot')];
+  const TOTAL  = 3;
+  const GAP    = 32;
+  const SPEED  = '0.8s cubic-bezier(0.4,0,0.2,1)';
+  const DELAY  = 3500;
+
+  // Append clones so the loop wraps seamlessly
+  const origCards = [...track.querySelectorAll('.c-card')];
+  origCards.forEach(c => {
+    const cl = c.cloneNode(true);
+    cl.setAttribute('aria-hidden', 'true');
+    track.appendChild(cl);
+  });
+
+  let step = 0, timer, busy = false;
+
+  function slideW() { return origCards[0].offsetWidth + GAP; }
+
+  function go(s, animate) {
+    if (animate === undefined) animate = true;
+    track.style.transition = animate ? `transform ${SPEED}` : 'none';
+    track.style.transform  = `translateX(-${s * slideW()}px)`;
+    step = s;
+    const d = s % TOTAL;
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === d);
+      dot.style.width = i === d ? '48px' : '16px';
+    });
+  }
+
+  track.addEventListener('transitionend', () => {
+    busy = false;
+    if (step >= TOTAL) go(0, false); // silent instant jump to real start
+  });
+
+  function advance() {
+    if (busy) return;
+    busy = true;
+    go(step + 1);
+  }
+
+  function startAuto() { clearInterval(timer); timer = setInterval(advance, DELAY); }
+  function stopAuto()  { clearInterval(timer); }
+
+  go(0, false);
+  startAuto();
+
+  outer.addEventListener('mouseenter', stopAuto);
+  outer.addEventListener('mouseleave', startAuto);
+
+  dots.forEach((d, i) => d.addEventListener('click', () => {
+    stopAuto(); busy = false; go(i); startAuto();
+  }));
+
+  // Swipe support
+  let sx = 0;
+  track.addEventListener('touchstart', e => sx = e.touches[0].clientX, {passive:true});
+  track.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) > 40) {
+      stopAuto(); busy = false;
+      go(dx > 0 ? Math.max(0, step - 1) : Math.min(TOTAL, step + 1));
+      startAuto();
+    }
+  }, {passive:true});
+
+  window.addEventListener('resize', () => go(step, false));
+})();
+
+/* ── INFRA CAROUSEL ──────────────────────────────────── */
+const iTrack  = document.getElementById('infraTrack');
+const iSlides = iTrack.querySelectorAll('.infra-slide');
+let iIdx = 0;
+
+function slideInfra(idx) {
+  const w = document.getElementById('infraOuter').offsetWidth;
+  iTrack.style.transform = `translateX(-${idx * (w + 32)}px)`;
+  iIdx = idx;
+}
+
+document.getElementById('infra-prev').addEventListener('click', () =>
+  slideInfra((iIdx - 1 + iSlides.length) % iSlides.length)
+);
+document.getElementById('infra-next').addEventListener('click', () =>
+  slideInfra((iIdx + 1) % iSlides.length)
+);
+
+/* ── Touch swipe ─────────────────────────────────────── */
+function addSwipe(el, total, fn) {
+  let sx = 0;
+  el.addEventListener('touchstart', e => sx = e.touches[0].clientX, {passive:true});
+  el.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    if(Math.abs(dx) > 40) fn((dx > 0 ? cIdx-1 : cIdx+1 + total) % total);
+  }, {passive:true});
+}
+addSwipe(iTrack, iSlides.length, slideInfra);
+
+/* ── Infra resize ────────────────────────────────────── */
+addEventListener('resize', () => slideInfra(iIdx));
+
+/* ── Counter animation ───────────────────────────────── */
+document.querySelectorAll('[data-count]').forEach(el => {
+  new IntersectionObserver(([e]) => {
+    if(!e.isIntersecting) return;
+    const target = parseFloat(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const dec    = target % 1 !== 0;
+    const dur    = 1600, start = performance.now();
+    const tick = now => {
+      const p = Math.min((now-start)/dur, 1);
+      const v = (1 - Math.pow(1-p, 3)) * target;
+      el.textContent = (dec ? v.toFixed(1) : Math.floor(v)) + suffix;
+      if(p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    e.target._obs?.disconnect();
+  }, {threshold:.5}).observe(el);
+});
+
+/* ── Custom cursor ─────────────────────────────────────── */
+(function(){
+  const dot  = document.getElementById('cur-dot');
+  const ring = document.getElementById('cur-ring');
+  if(!dot) return;
+  let mx=0, my=0, rx=0, ry=0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx+'px'; dot.style.top = my+'px';
+  });
+  (function tick(){
+    rx += (mx-rx)*0.13; ry += (my-ry)*0.13;
+    ring.style.left = rx+'px'; ring.style.top = ry+'px';
+    requestAnimationFrame(tick);
+  })();
+  document.addEventListener('mouseleave', () => { dot.style.opacity='0'; ring.style.opacity='0'; });
+  document.addEventListener('mouseenter', () => { dot.style.opacity='1'; ring.style.opacity='1'; });
+})();
+
+/* ── Word-split reveal on section headings ─────────────── */
+(function(){
+  function splitWords(el, baseDelay) {
+    if(!el) return;
+    let wi = 0;
+    function wrapNode(node) {
+      if(node.nodeType === 3) {
+        const parts = node.textContent.split(/(\s+)/);
+        const frag  = document.createDocumentFragment();
+        parts.forEach(p => {
+          if(/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+          if(!p) return;
+          const outer = document.createElement('span');
+          outer.className = 'split-word';
+          outer.style.transitionDelay = (baseDelay + wi*0.07) + 's';
+          const inner = document.createElement('span');
+          inner.className = 'split-inner';
+          inner.textContent = p;
+          outer.appendChild(inner);
+          frag.appendChild(outer);
+          wi++;
+        });
+        node.parentNode.replaceChild(frag, node);
+      } else {
+        [...node.childNodes].forEach(wrapNode);
+      }
+    }
+    [...el.childNodes].forEach(wrapNode);
+    new IntersectionObserver(([e]) => {
+      if(!e.isIntersecting) return;
+      el.querySelectorAll('.split-word').forEach(w => w.classList.add('vis'));
+      /* also trigger any line-draw inside */
+      el.querySelectorAll('.line-draw').forEach(ld => ld.classList.add('drawn'));
+    }, {threshold:.2}).observe(el);
+  }
+
+  ['courses-h2','struct-h2','infra-h2','insights-h2','map-h2'].forEach(cls => {
+    splitWords(document.querySelector('.'+cls), 0);
+  });
+
+  /* Hero H1 — own word reveal on load */
+  const h1 = document.querySelector('.hero-h1');
+  if(h1) {
+    h1.classList.remove('r','d1');
+    let wi = 0;
+    function wrapH1(node) {
+      if(node.nodeType === 3) {
+        const parts = node.textContent.split(/(\s+)/);
+        const frag  = document.createDocumentFragment();
+        parts.forEach(p => {
+          if(/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+          if(!p) return;
+          const outer = document.createElement('span');
+          outer.className = 'split-word';
+          outer.style.transitionDelay = (.25 + wi*.11) + 's';
+          const inner = document.createElement('span');
+          inner.className = 'split-inner';
+          inner.textContent = p;
+          outer.appendChild(inner);
+          frag.appendChild(outer);
+          wi++;
+        });
+        node.parentNode.replaceChild(frag, node);
+      } else if(node.nodeName !== 'BR') {
+        [...node.childNodes].forEach(wrapH1);
+      }
+    }
+    [...h1.childNodes].forEach(wrapH1);
+    requestAnimationFrame(() =>
+      setTimeout(() => h1.querySelectorAll('.split-word').forEach(w => w.classList.add('vis')), 180)
+    );
+  }
+})();
+
+/* ── Line-draw for standalone .line-draw elements ──────── */
+document.querySelectorAll('.line-draw').forEach(el => {
+  new IntersectionObserver(([e]) => {
+    if(e.isIntersecting) el.classList.add('drawn');
+  }, {threshold:.5}).observe(el);
+});
+
+/* ── Magnetic buttons ──────────────────────────────────── */
+document.querySelectorAll('.btn-primary, .nav-btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width/2)  * .15;
+    const y = (e.clientY - r.top  - r.height/2) * .15;
+    btn.style.transform = `translate(${x}px,${y - 2}px)`;
+  });
+  btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+});
+</script>
+<script src="components.js"></script>
+</body>
+</html>
