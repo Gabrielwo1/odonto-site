@@ -922,66 +922,187 @@
      COURSES
 ══════════════════════════════════════════════════════════ -->
 <section id="courses">
-  <div class="courses-head">
-    <div class="courses-head-l r">
-      <h2 class="courses-h2">Cursos de <span class="line-draw">Especialização</span></h2>
-      <p class="courses-desc">Programas intensivos desenhados para profissionais que buscam o domínio<br/>técnico e clínico em áreas estratégicas.</p>
+    <div class="courses-head">
+      <div class="courses-head-l r">
+        <h2 class="courses-h2">Cursos de <span class="line-draw">Especialização</span></h2>
+        <p class="courses-desc">Programas intensivos desenhados para profissionais que buscam o domínio<br/>técnico e clínico em áreas estratégicas.</p>
+      </div>
+      <div class="infra-arrows r d2" style="margin-top: 0; align-self: flex-end; margin-bottom: 24px;">
+        <button class="arrow-btn" id="courses-prev" aria-label="Anterior">
+          <svg width="8" height="12" viewBox="0 0 8 12" fill="none"><path d="M6.5 1L1.5 6l5 5" stroke="#414944" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="arrow-btn" id="courses-next" aria-label="Próximo">
+          <svg width="8" height="12" viewBox="0 0 8 12" fill="none"><path d="M1.5 1l5 5-5 5" stroke="#414944" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
     </div>
-    <div class="courses-head-r r d2">Explore nossa grade curricular</div>
-  </div>
 
-  <!-- Carousel -->
-  <div class="carousel-outer" id="coursesOuter">
-    <div class="carousel-track" id="coursesTrack">
+    <!-- Carousel -->
+    <div class="carousel-outer" id="coursesOuter">
+      <div class="carousel-track" id="coursesTrack">
 
-      <div class="c-card">
-        <img class="c-card-img"
-             src="group2.png"
-             alt="Endodontia"/>
-        <div class="c-card-ov" style="background: transparent; padding-bottom: 24px;">
-          <div class="c-card-foot" style="justify-content: flex-start;">
-            <button class="btn-card" style="width: 44px; height: 44px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-              <svg width="16" height="16" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
+        <!-- Card 1 (Endodontia) -->
+        <div class="c-card">
+          <img class="c-card-img" src="group2.png" alt="Endodontia"/>
+          <div class="c-card-ov" style="background: transparent; padding-bottom: 24px;">
+            <div class="c-card-foot" style="justify-content: flex-start; gap: 12px;">
+              <button class="btn-card" style="width: 44px; height: 44px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="16" height="16" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="btn-card" style="padding: 12px 24px; border-radius: 8px; background: var(--gold); border: none; color: #1b1913; font-weight: 800; font-size: 11px; letter-spacing: 1px;">INSCREVA-SE JÁ</button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="c-card">
-        <img class="c-card-img"
-             src="odontopediatria.png"
-             alt="Odontopediatria"/>
-        <div class="c-card-ov" style="background: transparent; padding-bottom: 24px;">
-          <div class="c-card-foot" style="justify-content: flex-start;">
-            <button class="btn-card" style="width: 44px; height: 44px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-              <svg width="16" height="16" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
+        <!-- Card 2 (Odontopediatria) -->
+        <div class="c-card">
+          <img class="c-card-img" src="odontopediatria.png" alt="Odontopediatria"/>
+          <div class="c-card-ov" style="background: transparent; padding-bottom: 24px;">
+            <div class="c-card-foot" style="justify-content: flex-start; gap: 12px;">
+              <button class="btn-card" style="width: 44px; height: 44px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="16" height="16" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="btn-card" style="padding: 12px 24px; border-radius: 8px; background: var(--gold); border: none; color: #1b1913; font-weight: 800; font-size: 11px; letter-spacing: 1px;">INSCREVA-SE JÁ</button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="c-card">
-        <img class="c-card-img"
-             src="ortho-advanced.png"
-             alt="Orthodontia"/>
-        <div class="c-card-ov" style="background: transparent; padding-bottom: 24px;">
-          <div class="c-card-foot" style="justify-content: flex-start;">
-            <button class="btn-card" style="width: 44px; height: 44px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-              <svg width="16" height="16" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
+        <!-- Card 3 (Orthodontia) -->
+        <div class="c-card">
+          <img class="c-card-img" src="ortho-advanced.png" alt="Orthodontia"/>
+          <div class="c-card-ov" style="background: transparent; padding-bottom: 24px;">
+            <div class="c-card-foot" style="justify-content: flex-start; gap: 12px;">
+              <button class="btn-card" style="width: 44px; height: 44px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="16" height="16" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="btn-card" style="padding: 12px 24px; border-radius: 8px; background: var(--gold); border: none; color: #1b1913; font-weight: 800; font-size: 11px; letter-spacing: 1px;">INSCREVA-SE JÁ</button>
+            </div>
           </div>
         </div>
-      </div>
 
+        <!-- Card 4 (Cirurgia Bucal) -->
+        <div class="c-card">
+          <img class="c-card-img" src="cirurgia-bucal.png" alt="Cirurgia Bucal"/>
+          <div class="c-card-ov" style="background: transparent; padding-bottom: 24px;">
+            <div class="c-card-foot" style="justify-content: flex-start; gap: 12px;">
+              <button class="btn-card" style="width: 44px; height: 44px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="16" height="16" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="btn-card" style="padding: 12px 24px; border-radius: 8px; background: var(--gold); border: none; color: #1b1913; font-weight: 800; font-size: 11px; letter-spacing: 1px;">INSCREVA-SE JÁ</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 (Implantodontia) -->
+        <div class="c-card">
+          <img class="c-card-img" src="card1.png" alt="Implantodontia" style="filter: brightness(0.65);"/>
+          <div class="c-card-ov" style="background: transparent; padding-bottom: 24px;">
+            <div class="c-card-foot" style="justify-content: flex-start; gap: 12px;">
+              <button class="btn-card" style="width: 44px; height: 44px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="16" height="16" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="btn-card" style="padding: 12px 24px; border-radius: 8px; background: var(--gold); border: none; color: #1b1913; font-weight: 800; font-size: 11px; letter-spacing: 1px;">INSCREVA-SE JÁ</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 (Harmonização Orofacial) -->
+        <div class="c-card">
+          <img class="c-card-img" src="card3.png" alt="Harmonização"/>
+          <div class="c-card-ov" style="background: transparent; padding-bottom: 24px;">
+            <div class="c-card-foot" style="justify-content: flex-start; gap: 12px;">
+              <button class="btn-card" style="width: 44px; height: 44px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="16" height="16" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="btn-card" style="padding: 12px 24px; border-radius: 8px; background: var(--gold); border: none; color: #1b1913; font-weight: 800; font-size: 11px; letter-spacing: 1px;">INSCREVA-SE JÁ</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </div>
 
-  <!-- Dots -->
-  <div class="carousel-dots" id="cdots">
-    <div class="cdot active" data-i="0"></div>
-    <div class="cdot" data-i="1"></div>
-    <div class="cdot" data-i="2"></div>
-  </div>
+    <!-- Dots -->
+    <div class="carousel-dots" id="cdots">
+      <div class="cdot active" data-i="0"></div>
+      <div class="cdot" data-i="1"></div>
+      <div class="cdot" data-i="2"></div>
+      <div class="cdot" data-i="3"></div>
+      <div class="cdot" data-i="4"></div>
+      <div class="cdot" data-i="5"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       PROFESSORS
+  ══════════════════════════════════════════════════════════ -->
+  <section id="professors" style="padding: 120px 0; background: #fff; overflow: hidden;">
+    <div class="wrap">
+      <div style="text-align: center; margin-bottom: 80px;">
+        <h2 class="courses-h2" style="font-size: 42px; margin-bottom: 16px;">Nosso Corpo <span class="line-draw">Docente</span></h2>
+        <p style="color: var(--text); font-size: 18px; max-width: 600px; margin: 0 auto;">Aprenda com especialistas renomados, mestres e doutores com vasta experiência clínica e acadêmica.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
+        
+        <!-- Prof 1 -->
+        <div class="r d1" style="text-align: center;">
+          <div style="width: 140px; height: 140px; border-radius: 50%; border: 2px solid var(--gold); margin: 0 auto 24px; padding: 10px; overflow: hidden;">
+            <div style="width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: #f4f4f5;">
+               <img src="especialistas.png" alt="Dr. Felipe Archetti" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+          </div>
+          <h4 style="font-size: 18px; font-weight: 800; color: var(--green-950); margin-bottom: 4px;">Dr. Felipe Archetti</h4>
+          <p style="font-size: 13px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">Endodontia</p>
+        </div>
+
+        <!-- Prof 2 -->
+        <div class="r d2" style="text-align: center;">
+          <div style="width: 140px; height: 140px; border-radius: 50%; border: 2px solid var(--gold); margin: 0 auto 24px; padding: 10px; overflow: hidden;">
+            <div style="width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: #f4f4f5;">
+               <img src="especialistas.png" alt="Dr. Flares Baratto Filho" style="width: 100%; height: 100%; object-fit: cover; object-position: right;">
+            </div>
+          </div>
+          <h4 style="font-size: 18px; font-weight: 800; color: var(--green-950); margin-bottom: 4px;">Dr. Flares Baratto Filho</h4>
+          <p style="font-size: 13px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">Endodontia</p>
+        </div>
+
+        <!-- Prof 3 -->
+        <div class="r d3" style="text-align: center;">
+          <div style="width: 140px; height: 140px; border-radius: 50%; border: 2px solid var(--gold); margin: 0 auto 24px; padding: 10px; overflow: hidden;">
+            <div style="width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: #f4f4f5;">
+               <img src="especialistas.png" alt="Prof. Dr. Otávio Augusto Pozza" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+          </div>
+          <h4 style="font-size: 18px; font-weight: 800; color: var(--green-950); margin-bottom: 4px;">Dr. Otávio Augusto Pozza</h4>
+          <p style="font-size: 13px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">Ortodontia</p>
+        </div>
+
+        <!-- Prof 4 -->
+        <div class="r d4" style="text-align: center;">
+          <div style="width: 140px; height: 140px; border-radius: 50%; border: 2px solid var(--gold); margin: 0 auto 24px; padding: 10px; overflow: hidden;">
+            <div style="width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: #f4f4f5;">
+               <img src="odontopediatria.png" alt="Prof. Dr. Diogo Alexandre de Oliveira" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+          </div>
+          <h4 style="font-size: 18px; font-weight: 800; color: var(--green-950); margin-bottom: 4px;">Dr. Diogo Oliveira</h4>
+          <p style="font-size: 13px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">Odontopediatria</p>
+        </div>
+
+        <!-- Prof 5 -->
+        <div class="r d1" style="text-align: center;">
+          <div style="width: 140px; height: 140px; border-radius: 50%; border: 2px solid var(--gold); margin: 0 auto 24px; padding: 10px; overflow: hidden;">
+            <div style="width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: #f4f4f5;">
+               <img src="cirurgia-bucal.png" alt="Prof. Dra. Karen Dalla Costa" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+          </div>
+          <h4 style="font-size: 18px; font-weight: 800; color: var(--green-950); margin-bottom: 4px;">Dra. Karen Dalla Costa</h4>
+          <p style="font-size: 13px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">Cirurgia Bucal</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
 </section>
 
 <!-- ══════════════════════════════════════════════════════════
@@ -1352,8 +1473,8 @@ new IntersectionObserver(entries => {
 (function(){
   const outer  = document.getElementById('coursesOuter');
   const track  = document.getElementById('coursesTrack');
-  const dots   = [...document.querySelectorAll('.cdot')];
-  const TOTAL  = 3;
+  const dots   = [...document.querySelectorAll('#cdots .cdot')];
+  const TOTAL  = 6;
   const GAP    = 32;
   const SPEED  = '0.8s cubic-bezier(0.4,0,0.2,1)';
   const DELAY  = 3500;
@@ -1384,7 +1505,8 @@ new IntersectionObserver(entries => {
 
   track.addEventListener('transitionend', () => {
     busy = false;
-    if (step >= TOTAL) go(0, false); // silent instant jump to real start
+    if (step >= TOTAL) go(0, false); 
+    if (step < 0) go(TOTAL - 1, false);
   });
 
   function advance() {
@@ -1406,6 +1528,14 @@ new IntersectionObserver(entries => {
     stopAuto(); busy = false; go(i); startAuto();
   }));
 
+  // Arrows
+  document.getElementById('courses-prev').addEventListener('click', () => {
+    stopAuto(); busy = false; go(step - 1); startAuto();
+  });
+  document.getElementById('courses-next').addEventListener('click', () => {
+    stopAuto(); busy = false; go(step + 1); startAuto();
+  });
+
   // Swipe support
   let sx = 0;
   track.addEventListener('touchstart', e => sx = e.touches[0].clientX, {passive:true});
@@ -1413,7 +1543,7 @@ new IntersectionObserver(entries => {
     const dx = e.changedTouches[0].clientX - sx;
     if (Math.abs(dx) > 40) {
       stopAuto(); busy = false;
-      go(dx > 0 ? Math.max(0, step - 1) : Math.min(TOTAL, step + 1));
+      go(dx > 0 ? step - 1 : step + 1);
       startAuto();
     }
   }, {passive:true});
