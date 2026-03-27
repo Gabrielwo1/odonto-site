@@ -210,46 +210,23 @@
       <!-- Quick Cursos Table -->
       <div class="panel">
         <div class="panel-head">
-          <h3 class="panel-title">Edição Rápida: Últimos Cursos</h3>
-          <button class="btn-primary">
+          <h3 class="panel-title">Últimos Cursos Cadastrados</h3>
+          <a href="form-curso.html" class="btn-primary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Criar Novo Curso
-          </button>
+          </a>
         </div>
         <table class="table-w">
           <thead>
             <tr>
               <th>Curso e Título</th>
-              <th>Professor/Coordenador</th>
+              <th>Modalidade</th>
               <th>Status</th>
               <th>Ações</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>
-                <div style="font-weight:700;">Harmonização Orofacial</div>
-                <div style="font-size:12px;color:#a1a1aa;margin-top:4px;">Especialização</div>
-              </td>
-              <td>Prof. Mário Sobrenome</td>
-              <td><span class="badge-status badge-active">Ativo site</span></td>
-              <td class="actions">
-                <button class="btn-icon" title="Editar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
-                <button class="btn-icon" title="Excluir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div style="font-weight:700;">Implantodontia Turma 3</div>
-                <div style="font-size:12px;color:#a1a1aa;margin-top:4px;">Especialização Básica</div>
-              </td>
-              <td>Prof. Jaques Luiz</td>
-              <td><span class="badge-status badge-draft">Rascunho</span></td>
-              <td class="actions">
-                <button class="btn-icon" title="Editar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
-                <button class="btn-icon" title="Excluir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
-              </td>
-            </tr>
+          <tbody id="tabela-cursos-dash">
+            <tr><td colspan="4" style="text-align:center;padding:24px;color:#a1a1aa;">Carregando...</td></tr>
           </tbody>
         </table>
       </div>
@@ -281,6 +258,52 @@ async function carregarEstatisticas() {
 }
 
 carregarEstatisticas();
+
+async function carregarCursosRecentes() {
+  const tbody = document.getElementById("tabela-cursos-dash");
+  const { data: cursos, error } = await supabaseClient
+    .from("cursos")
+    .select("id, titulo, categoria, inscricoes_abertas")
+    .order("criado_em", { ascending: false })
+    .limit(5);
+
+  if (error || !cursos || cursos.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:24px;color:#a1a1aa;">Nenhum curso cadastrado ainda.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = cursos.map(c => {
+    const badgeClass = c.inscricoes_abertas ? "badge-active" : "badge-draft";
+    const badgeLabel = c.inscricoes_abertas ? "Inscrições Abertas" : "Encerrado";
+    return `
+      <tr>
+        <td>
+          <div style="font-weight:700;">${c.titulo}</div>
+          <div style="font-size:12px;color:#a1a1aa;margin-top:4px;">${c.categoria || ""}</div>
+        </td>
+        <td>${c.categoria || "—"}</td>
+        <td><span class="badge-status ${badgeClass}">${badgeLabel}</span></td>
+        <td class="actions">
+          <button class="btn-icon" title="Editar" onclick="window.location.href='form-curso.html?id=${c.id}'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+          <button class="btn-icon" title="Excluir" onclick="excluirCursoDash('${c.id}')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </td>
+      </tr>`;
+  }).join("");
+}
+
+async function excluirCursoDash(id) {
+  if (!confirm("Excluir este curso permanentemente?")) return;
+  const { error } = await supabaseClient.from("cursos").delete().eq("id", id);
+  if (error) { alert("Erro ao excluir: " + error.message); return; }
+  carregarCursosRecentes();
+  carregarEstatisticas();
+}
+
+carregarCursosRecentes();
 </script>
 </body>
 </html>

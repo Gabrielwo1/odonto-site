@@ -58,11 +58,13 @@
   
   .file-drop {
     border: 2px dashed rgba(0,0,0,0.1); border-radius: 12px; padding: 40px; text-align: center;
-    background: #fafafa; cursor: pointer; transition: all .2s;
+    background: #fafafa; cursor: pointer; transition: all .2s; position: relative;
   }
   .file-drop:hover { border-color: var(--green-700); background: #f0f7f5; }
   .file-drop svg { color: var(--green-700); margin-bottom: 12px; }
   .file-drop p { font-size: 14px; font-weight: 600; color: var(--text); }
+  .file-drop input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .img-preview { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-top: 12px; display: none; }
   
   /* Mock Editor Toolbar */
   .editor-toolbar { display: flex; align-items: center; gap: 8px; padding: 12px; background: #f9f9f9; border: 1px solid rgba(0,0,0,0.1); border-bottom: none; border-radius: 10px 10px 0 0; }
@@ -133,10 +135,12 @@
 
         <div class="form-group full">
           <label>Imagem de Capa (Thumbnail)</label>
-          <div class="file-drop">
+          <div class="file-drop" id="file-drop-zone">
+            <input type="file" id="capa" accept="image/*" onchange="previewImagem(this)" />
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-            <p>Arraste uma imagem ou clique para selecionar</p>
+            <p id="file-drop-label">Arraste uma imagem ou clique para selecionar</p>
           </div>
+          <img id="img-preview" class="img-preview" alt="Preview da capa" />
         </div>
 
         <div class="form-group full" style="margin-top: 16px;">
@@ -155,8 +159,8 @@
         </div>
 
         <div class="actions-row">
-          <button class="btn btn-outline" onclick="salvarPost('rascunho')">Salvar Rascunho</button>
-          <button class="btn btn-primary" onclick="salvarPost('publicado')">Publicar Artigo</button>
+          <button class="btn btn-outline" id="btn-rascunho" onclick="salvarPost('rascunho')">Salvar Rascunho</button>
+          <button class="btn btn-primary" id="btn-publicar" onclick="salvarPost('publicado')">Publicar Artigo</button>
         </div>
 
       </div>
@@ -168,23 +172,98 @@
 <script>
 checkAuth();
 
-async function salvarPost() {
-  const titulo    = document.getElementById("titulo").value.trim();
-  const categoria = document.getElementById("categoria").value;
-  const descricao = document.getElementById("descricao").value.trim();
-  const conteudo  = document.querySelector(".editor-area").value.trim();
+// ── Modo edição: detecta ?id= na URL ──────────────────────
+const params = new URLSearchParams(window.location.search);
+const editId = params.get("id");
+
+if (editId) {
+  document.querySelector(".tb-title").innerHTML = `
+    <a href="list-blog.html" class="back-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg></a>
+    Editar Artigo`;
+  document.getElementById("btn-publicar").textContent = "Salvar Alterações";
+  carregarPost(editId);
+}
+
+async function carregarPost(id) {
+  const { data, error } = await supabaseClient.from("posts").select("*").eq("id", id).single();
+  if (error || !data) { alert("Artigo não encontrado."); return; }
+  document.getElementById("titulo").value       = data.titulo    || "";
+  document.getElementById("categoria").value    = data.categoria || "NOTÍCIAS";
+  document.getElementById("descricao").value    = data.descricao || "";
+  document.querySelector(".editor-area").value  = data.conteudo  || "";
+  if (data.data_publicacao) document.getElementById("data_publicacao").value = data.data_publicacao;
+  if (data.imagem_url) {
+    const preview = document.getElementById("img-preview");
+    preview.src = data.imagem_url;
+    preview.style.display = "block";
+    document.getElementById("file-drop-label").textContent = "Clique para trocar a imagem";
+  }
+}
+
+// ── Preview local ao escolher arquivo ─────────────────────
+function previewImagem(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const preview = document.getElementById("img-preview");
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = "block";
+  document.getElementById("file-drop-label").textContent = file.name;
+}
+
+// ── Upload de imagem para o Supabase Storage ──────────────
+async function uploadImagem(file) {
+  const ext  = file.name.split(".").pop();
+  const path = `capas/${Date.now()}.${ext}`;
+  const { error } = await supabaseClient.storage.from("post-images").upload(path, file, { upsert: true });
+  if (error) { console.warn("Upload de imagem falhou:", error.message); return null; }
+  const { data } = supabaseClient.storage.from("post-images").getPublicUrl(path);
+  return data.publicUrl;
+}
+
+// ── Salvar / Publicar ─────────────────────────────────────
+async function salvarPost(status) {
+  const titulo          = document.getElementById("titulo").value.trim();
+  const categoria       = document.getElementById("categoria").value;
+  const descricao       = document.getElementById("descricao").value.trim();
+  const conteudo        = document.querySelector(".editor-area").value.trim();
+  const data_publicacao = document.getElementById("data_publicacao").value || null;
+  const fileInput       = document.getElementById("capa");
 
   if (!titulo) { alert("Informe o título do artigo."); return; }
 
-  const { error } = await supabaseClient
-    .from("posts")
-    .insert([{ titulo, categoria, descricao, conteudo }]);
+  const btnPublicar = document.getElementById("btn-publicar");
+  const btnRascunho = document.getElementById("btn-rascunho");
+  btnPublicar.disabled = btnRascunho.disabled = true;
+  btnPublicar.textContent = "Salvando...";
+
+  // Upload de imagem (opcional)
+  let imagem_url = null;
+  if (editId) {
+    // Mantém a URL atual se não foi trocada
+    const preview = document.getElementById("img-preview");
+    if (preview.style.display !== "none" && !fileInput.files[0]) imagem_url = preview.src;
+  }
+  if (fileInput.files[0]) {
+    imagem_url = await uploadImagem(fileInput.files[0]);
+  }
+
+  const payload = { titulo, categoria, descricao, conteudo, status, data_publicacao };
+  if (imagem_url) payload.imagem_url = imagem_url;
+
+  let error;
+  if (editId) {
+    ({ error } = await supabaseClient.from("posts").update(payload).eq("id", editId));
+  } else {
+    ({ error } = await supabaseClient.from("posts").insert([payload]));
+  }
 
   if (error) {
     alert("Erro ao salvar: " + error.message);
     console.error(error);
+    btnPublicar.disabled = btnRascunho.disabled = false;
+    btnPublicar.textContent = editId ? "Salvar Alterações" : "Publicar Artigo";
   } else {
-    alert("Artigo publicado com sucesso 🚀");
+    alert(status === "publicado" ? "Artigo publicado com sucesso 🚀" : "Rascunho salvo!");
     window.location.href = "list-blog.html";
   }
 }

@@ -119,7 +119,7 @@ async function carregarPosts() {
 
   const { data: posts, error } = await supabaseClient
     .from("posts")
-    .select("id, titulo, categoria, criado_em")
+    .select("id, titulo, categoria, status, criado_em")
     .order("criado_em", { ascending: false });
 
   if (error) {
@@ -136,13 +136,18 @@ async function carregarPosts() {
     const data = p.criado_em
       ? new Date(p.criado_em).toLocaleDateString("pt-BR")
       : "—";
+    const badgeClass = p.status === "rascunho" ? "badge-draft" : "badge-active";
+    const badgeLabel = p.status === "rascunho" ? "Rascunho" : "Publicado";
     return `
       <tr>
         <td><div style="font-weight:700;">${p.titulo}</div></td>
         <td>${p.categoria || "—"}</td>
         <td>${data}</td>
-        <td><span class="badge-status badge-active">Publicado</span></td>
+        <td><span class="badge-status ${badgeClass}">${badgeLabel}</span></td>
         <td class="actions">
+          <button class="btn-icon" title="Editar" onclick="window.location.href='form-blog.html?id=${p.id}'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
           <button class="btn-icon" title="Excluir" onclick="excluirPost('${p.id}')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
           </button>
