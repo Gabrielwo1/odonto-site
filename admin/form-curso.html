@@ -133,14 +133,26 @@
           </div>
         </div>
 
+        <!-- Imagem do card (listagem) -->
         <div class="form-group full">
-          <label>Imagem de Capa do Curso</label>
+          <label>Imagem do Card <span style="font-weight:500;color:#a1a1aa;">(usada nos cards de listagem — quadrada ou 3:4)</span></label>
           <div class="file-drop" id="file-drop-zone">
             <input type="file" id="capa" accept="image/*" onchange="previewImagem(this)" />
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
             <p id="file-drop-label">Arraste uma imagem ou clique para selecionar</p>
           </div>
-          <img id="img-preview" class="img-preview" alt="Preview da capa" />
+          <img id="img-preview" class="img-preview" alt="Preview do card" />
+        </div>
+
+        <!-- Banner interno da página do curso -->
+        <div class="form-group full">
+          <label>Banner Interno da Página do Curso <span style="font-weight:500;color:#a1a1aa;">(hero da página — recomendado 1920×700px, paisagem)</span></label>
+          <div class="file-drop" id="file-drop-zone-banner">
+            <input type="file" id="capa_banner" accept="image/*" onchange="previewBanner(this)" />
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <p id="file-drop-label-banner">Arraste o banner ou clique para selecionar</p>
+          </div>
+          <img id="banner-preview" class="img-preview" alt="Preview do banner" style="aspect-ratio:16/5;object-fit:cover;" />
         </div>
 
         <h3 class="panel-section-title" style="margin-top:32px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Detalhes do Curso</h3>
@@ -216,6 +228,12 @@ async function carregarCurso(id) {
     preview.style.display = "block";
     document.getElementById("file-drop-label").textContent = "Clique para trocar a imagem";
   }
+  if (data.imagem_banner_url) {
+    const bannerPreview = document.getElementById("banner-preview");
+    bannerPreview.src = data.imagem_banner_url;
+    bannerPreview.style.display = "block";
+    document.getElementById("file-drop-label-banner").textContent = "Clique para trocar o banner";
+  }
 }
 
 // ── Preview local ao escolher arquivo ─────────────────────
@@ -226,6 +244,15 @@ function previewImagem(input) {
   preview.src = URL.createObjectURL(file);
   preview.style.display = "block";
   document.getElementById("file-drop-label").textContent = file.name;
+}
+
+function previewBanner(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const preview = document.getElementById("banner-preview");
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = "block";
+  document.getElementById("file-drop-label-banner").textContent = file.name;
 }
 
 // ── Upload de imagem para Supabase Storage ─────────────────
@@ -254,7 +281,9 @@ async function salvarCurso() {
   const btn = document.getElementById("btn-salvar");
   btn.disabled = true;
 
-  // Upload de imagem (opcional)
+  const bannerInput = document.getElementById("capa_banner");
+
+  // Upload do card (opcional)
   let imagem_url = null;
   if (editId) {
     const preview = document.getElementById("img-preview");
@@ -264,8 +293,19 @@ async function salvarCurso() {
     imagem_url = await uploadImagem(fileInput.files[0]);
   }
 
+  // Upload do banner interno (opcional)
+  let imagem_banner_url = null;
+  if (editId) {
+    const bannerPreview = document.getElementById("banner-preview");
+    if (bannerPreview.style.display !== "none" && !bannerInput.files[0]) imagem_banner_url = bannerPreview.src;
+  }
+  if (bannerInput.files[0]) {
+    imagem_banner_url = await uploadImagem(bannerInput.files[0]);
+  }
+
   const payload = { titulo, categoria, descricao, professor, carga_horaria, data_inicio, modulos, inscricoes_abertas };
   if (imagem_url) payload.imagem_url = imagem_url;
+  if (imagem_banner_url) payload.imagem_banner_url = imagem_banner_url;
 
   let error;
   if (editId) {

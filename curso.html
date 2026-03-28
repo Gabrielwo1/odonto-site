@@ -510,8 +510,10 @@ if(nav_el){ addEventListener('scroll', () => nav_el.classList.toggle('scrolled',
       document.getElementById('hero-category').textContent = curso.categoria;
     }
 
-    if (curso.imagem_url) {
-      document.getElementById('hero-img').src = curso.imagem_url;
+    /* Banner interno tem prioridade; fallback para imagem do card */
+    const heroBg = curso.imagem_banner_url || curso.imagem_url;
+    if (heroBg) {
+      document.getElementById('hero-img').src = heroBg;
     }
 
     if (curso.inscricoes_abertas) {
