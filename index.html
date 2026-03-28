@@ -1303,60 +1303,25 @@
 
     <div class="insights-head r">
       <h2 class="insights-h2">Insights &amp; <span class="line-draw">Conhecimento</span></h2>
-      <a href="#" class="insights-link">
+      <a href="blog.html" class="insights-link">
         Ver todos os artigos
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 2.5l3.5 3.5L7 9.5" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
     </div>
 
-    <div class="blog-grid">
+    <!-- Blog cards carregados via Supabase; fallback estático abaixo -->
+    <div class="blog-grid" id="home-blog-grid">
 
       <div class="blog-card r">
         <div class="blog-img-wrap">
-          <img class="blog-img"
-               src="https://www.figma.com/api/mcp/asset/e6690a03-d414-4fc3-ab9f-8dee04d61112"
-               alt="Scanner intraoral"/>
+          <img class="blog-img" src="especialistas.png" alt="Artigo"/>
         </div>
         <div class="blog-body">
-          <p class="blog-cat">Inovação Digital</p>
-          <h3 class="blog-title">O futuro do escaneamento intraoral</h3>
-          <p class="blog-desc">Como a tecnologia digital está otimizando o fluxo de trabalho e o conforto do paciente.</p>
-          <a href="#" class="blog-link">
-            Ler mais
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8.5 3.5l4 3.5-4 3.5" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="8" y="5.5" width="1" height="3" rx=".5" fill="var(--green-700)" opacity="0"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="blog-card r d1">
-        <div class="blog-img-wrap">
-          <img class="blog-img"
-               src="https://www.figma.com/api/mcp/asset/365bd5ee-10fb-4a28-8a92-5bcde8747619"
-               alt="Alinhadores"/>
-        </div>
-        <div class="blog-body">
-          <p class="blog-cat">Ortodontia</p>
-          <h3 class="blog-title">Alinhadores para casos complexos</h3>
-          <p class="blog-desc">Desmistificando os limites dos alinhadores e o planejamento biomecânico avançado.</p>
-          <a href="#" class="blog-link">
-            Ler mais
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8.5 3.5l4 3.5-4 3.5" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="blog-card r d2">
-        <div class="blog-img-wrap">
-          <img class="blog-img"
-               src="https://www.figma.com/api/mcp/asset/e44e2b3c-12d4-428f-b410-dc91ae526744"
-               alt="Branding clínico"/>
-        </div>
-        <div class="blog-body">
-          <p class="blog-cat">Gestão</p>
-          <h3 class="blog-title">Branding para consultórios de elite</h3>
-          <p class="blog-desc">Por que o posicionamento de marca é vital para atrair pacientes de alto ticket.</p>
-          <a href="#" class="blog-link">
-            Ler mais
+          <p class="blog-cat">NOTÍCIAS</p>
+          <h3 class="blog-title">Bem-vindo ao Blog BIONEP</h3>
+          <p class="blog-desc">Fique por dentro das novidades, artigos científicos e dicas do mundo da odontologia.</p>
+          <a href="blog.html" class="blog-link">
+            Ver todos
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8.5 3.5l4 3.5-4 3.5" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
         </div>
@@ -1470,11 +1435,11 @@ new IntersectionObserver(entries => {
 }, { threshold:.4 }).observe(document.getElementById('courses'));
 
 /* ── COURSES CAROUSEL — infinite autoplay ─────────────── */
-(function(){
+/* Called by Supabase loader below (or with TOTAL=6 as fallback) */
+function initCarousel(TOTAL){
   const outer  = document.getElementById('coursesOuter');
   const track  = document.getElementById('coursesTrack');
   const dots   = [...document.querySelectorAll('#cdots .cdot')];
-  const TOTAL  = 6;
   const GAP    = 32;
   const SPEED  = '0.8s cubic-bezier(0.4,0,0.2,1)';
   const DELAY  = 3500;
@@ -1549,7 +1514,7 @@ new IntersectionObserver(entries => {
   }, {passive:true});
 
   window.addEventListener('resize', () => go(step, false));
-})();
+} // end initCarousel
 
 /* ── INFRA CAROUSEL ──────────────────────────────────── */
 const iTrack  = document.getElementById('infraTrack');
@@ -1713,6 +1678,122 @@ document.querySelectorAll('.btn-primary, .nav-btn').forEach(btn => {
   btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
 });
 </script>
+
+<!-- ══════════════════════════════════════════════════════════
+     SUPABASE — Blog + Cursos dinâmicos na Home
+══════════════════════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(async function(){
+  const SUPA_URL = "https://jyrcknvxnkobngpzrqok.supabase.co";
+  const SUPA_KEY = "sb_publishable_6zohSf7oHukZKO9h0CY-6g_yVP97NTK";
+
+  const linkSvg = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8.5 3.5l4 3.5-4 3.5" stroke="var(--green-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const arrowCircle = `<svg width="16" height="16" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 2l2.5 2.5L5 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  function esc(s){
+    return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
+  }
+
+  function fmtDate(d){
+    if (!d) return '';
+    try {
+      return new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'});
+    } catch(e){ return d; }
+  }
+
+  let coursesLoaded = false;
+
+  try {
+    const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+    /* ── 1. BLOG: 3 posts mais recentes ───────────────── */
+    const { data: posts } = await db
+      .from('posts')
+      .select('id,titulo,categoria,descricao,imagem_url,data_publicacao')
+      .eq('status', 'publicado')
+      .order('data_publicacao', { ascending: false })
+      .limit(3);
+
+    if (posts && posts.length > 0) {
+      const delays = ['r', 'r d1', 'r d2'];
+      const blogGrid = document.getElementById('home-blog-grid');
+      blogGrid.innerHTML = posts.map((p, i) => `
+        <div class="blog-card ${delays[i]}">
+          <div class="blog-img-wrap">
+            <img class="blog-img"
+                 src="${esc(p.imagem_url || 'especialistas.png')}"
+                 alt="${esc(p.titulo)}"
+                 onerror="this.src='especialistas.png'"/>
+          </div>
+          <div class="blog-body">
+            <p class="blog-cat">${esc(p.categoria || 'NOTÍCIAS')}</p>
+            <h3 class="blog-title">${esc(p.titulo)}</h3>
+            <p class="blog-desc">${esc(p.descricao || '')}</p>
+            <a href="post.html?id=${esc(p.id)}" class="blog-link">
+              Ler mais ${linkSvg}
+            </a>
+          </div>
+        </div>
+      `).join('');
+      blogGrid.querySelectorAll('.r').forEach(el => rObs.observe(el));
+    }
+
+    /* ── 2. CURSOS: até 6 cursos para o carrossel ─────── */
+    const { data: cursos } = await db
+      .from('cursos')
+      .select('id,titulo,categoria,imagem_url,inscricoes_abertas')
+      .order('criado_em', { ascending: false })
+      .limit(6);
+
+    if (cursos && cursos.length > 0) {
+      const track = document.getElementById('coursesTrack');
+      const cdots = document.getElementById('cdots');
+      const n = cursos.length;
+
+      /* Rebuild cards */
+      track.innerHTML = cursos.map(c => `
+        <a href="cursos.html" class="c-card" style="text-decoration:none;">
+          <img class="c-card-img"
+               src="${esc(c.imagem_url || 'especialistas.png')}"
+               alt="${esc(c.titulo)}"
+               onerror="this.src='especialistas.png'"
+               style="filter:brightness(.65)"/>
+          <div class="c-card-ov" style="background:transparent;padding-bottom:24px;">
+            <div class="c-card-foot" style="justify-content:flex-start;gap:12px;">
+              <span class="btn-card"
+                    style="width:44px;height:44px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                ${arrowCircle}
+              </span>
+              <span class="btn-card"
+                    style="padding:12px 24px;border-radius:8px;background:var(--gold);border:none;color:#1b1913;font-weight:800;font-size:11px;letter-spacing:1px;">
+                ${esc(c.titulo.length > 22 ? c.titulo.substring(0,20)+'…' : c.titulo).toUpperCase()}
+              </span>
+            </div>
+          </div>
+        </a>
+      `).join('');
+
+      /* Rebuild dots */
+      cdots.innerHTML = Array.from({length: n}, (_, i) =>
+        `<div class="cdot${i===0?' active':''}" data-i="${i}"></div>`
+      ).join('');
+      if (cdots.firstElementChild) cdots.firstElementChild.style.width = '48px';
+
+      coursesLoaded = true;
+      initCarousel(n);
+    }
+
+  } catch(err) {
+    console.warn('Supabase home:', err.message);
+  }
+
+  /* Fallback: run carousel with the 6 original static cards */
+  if (!coursesLoaded) initCarousel(6);
+
+})();
+</script>
+
 <script src="components.js"></script>
 </body>
 </html>

@@ -292,68 +292,18 @@
 <div class="blog-wrap">
   
   <!-- LEFT LIST -->
-  <main class="blog-main r d2">
-    
-    <!-- Post 1 -->
-    <a href="#" class="post-card">
-       <div class="post-img"><img src="especialistas.png" style="filter: brightness(0.9);" alt="Turma Implantodontia"></div>
-       <div class="post-content">
-          <span class="post-tag">NOTÍCIAS</span>
-          <h2 class="post-title">SEGUNDA TURMA DE ESPECIALIZAÇÃO EM IMPLANTODONTIA BIONEP</h2>
-          <p class="post-desc">Iniciou na Bionep a segunda turma de Especialização em Implantodontia, coordenada pelo Prof. Jaques Luiz - mestre e doutorando em Implantodontia. Em sua grade, o curso apresenta-se em 24 módulos focados intensamente na prática cirúrgica.</p>
-          <div class="post-meta">
-            <span><svg style="margin-right:6px;width:12px;margin-bottom:-2px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Comentários Desativos</span>
-            <span style="color:var(--green-950);">16 DE MAIO DE 2019</span>
-          </div>
-       </div>
-    </a>
-    
-    <!-- Post 2 -->
-    <a href="#" class="post-card">
-       <div class="post-img"><img src="https://www.figma.com/api/mcp/asset/cac9872f-6d17-445c-b7f3-ddd38f0e99e7" alt="Harmonização Facial"></div>
-       <div class="post-content">
-          <span class="post-tag">NOTÍCIAS</span>
-          <h2 class="post-title">SEJA UM ESPECIALISTA EM HARMONIZAÇÃO FACIAL</h2>
-          <p class="post-desc">Com importância reconhecida e cada vez mais procurada por pacientes, a Harmonização Orofacial tem relevância que vai muito além da estética. Neste caso, os benefícios para a saúde são incontáveis e elevam drasticamente o nível de vida do seu paciente clínico diário.</p>
-          <div class="post-meta">
-            <span><svg style="margin-right:6px;width:12px;margin-bottom:-2px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Comentários Desativos</span>
-            <span style="color:var(--green-950);">27 DE FEVEREIRO DE 2019</span>
-          </div>
-       </div>
-    </a>
-
-    <!-- Post 3 -->
-    <a href="#" class="post-card">
-       <div class="post-img"><img src="campus.png" style="filter: sepia(0.3) brightness(0.9);" alt="TCCs"></div>
-       <div class="post-content">
-          <span class="post-tag">NOTÍCIAS</span>
-          <h2 class="post-title">ALUNOS COMEMORAM RESULTADOS ALCANÇADOS NA APRESENTAÇÃO DE TCCS</h2>
-          <p class="post-desc">As últimas semanas foram repletas de boas notícias aqui na Bionep! Tivemos diversas bancas com apresentação de TCC. Nossos alunos tiveram um desempenho excelente refletindo totalmente a nossa metodologia Premium. Estamos muito orgulhosos das novas teses submetidas para aprovação!</p>
-          <div class="post-meta">
-            <span><svg style="margin-right:6px;width:12px;margin-bottom:-2px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Comentários Desativos</span>
-            <span style="color:var(--green-950);">25 DE FEVEREIRO DE 2019</span>
-          </div>
-       </div>
-    </a>
-
-    <!-- Pagination -->
-    <div class="pagination">
-      <a href="#" class="page-link active">1</a>
-      <a href="#" class="page-link">2</a>
-      <a href="#" class="page-link">3</a>
-      <a href="#" class="page-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
-    </div>
-
+  <main class="blog-main r d2" id="posts-list">
+    <div style="text-align:center;padding:60px 0;color:#a1a1aa;font-size:15px;font-weight:600;">Carregando artigos...</div>
   </main>
 
   <!-- RIGHT SIDEBAR -->
   <aside class="blog-sidebar r d3">
-    
+
     <!-- Search widget -->
     <div class="widget col-span">
       <div class="search-box">
-        <input type="text" class="search-input" placeholder="Pesquisar artigos...">
-        <button class="search-btn">
+        <input type="text" id="search-input" class="search-input" placeholder="Pesquisar artigos...">
+        <button class="search-btn" onclick="filtrarPosts()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </button>
       </div>
@@ -362,19 +312,17 @@
     <!-- Recent Posts -->
     <div class="widget">
       <h3 class="widget-title">Posts Recentes</h3>
-      <div class="recent-posts">
-        <a href="#" class="recent-post-link">SEGUNDA TURMA DE ESPECIALIZAÇÃO EM IMPLANTODONTIA BIONEP</a>
-        <a href="#" class="recent-post-link">SEJA UM ESPECIALISTA EM HARMONIZAÇÃO FACIAL</a>
-        <a href="#" class="recent-post-link">ALUNOS COMEMORAM RESULTADOS ALCANÇADOS NA APRESENTAÇÃO DE TCCS</a>
-        <a href="#" class="recent-post-link">CURSO DE ANCORAGEM ESQUELÉTICA EXTRA-ALVEOLAR FOI REALIZADO</a>
-        <a href="#" class="recent-post-link">ÚLTIMAS VAGAS PARA A ESPECIALIZAÇÃO EM ORTODONTIA</a>
+      <div class="recent-posts" id="recent-posts-sidebar">
+        <span style="color:#a1a1aa;font-size:13px;">Carregando...</span>
       </div>
     </div>
 
     <!-- Category -->
     <div class="widget">
       <h3 class="widget-title">Categorias</h3>
-      <a href="#" class="cat-link">Notícias (24)</a>
+      <div id="categorias-sidebar">
+        <span style="color:#a1a1aa;font-size:13px;">Carregando...</span>
+      </div>
     </div>
 
     <!-- Social -->
@@ -396,6 +344,7 @@
 
 <div id="bionep-footer-placeholder"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ── Reveal ──────────────────────────────────────────── */
 const rEls = document.querySelectorAll('.r');
@@ -403,6 +352,77 @@ const rObs = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on') });
 }, { threshold:.1, rootMargin:'0px 0px -40px 0px' });
 rEls.forEach(el => rObs.observe(el));
+
+/* ── Supabase ─────────────────────────────────────────── */
+const SUPA_URL = "https://jyrcknvxnkobngpzrqok.supabase.co";
+const SUPA_KEY = "sb_publishable_6zohSf7oHukZKO9h0CY-6g_yVP97NTK";
+const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+let todosPosts = [];
+
+function renderPosts(posts) {
+  const main = document.getElementById("posts-list");
+  if (!posts || posts.length === 0) {
+    main.innerHTML = `<div style="text-align:center;padding:60px 0;color:#a1a1aa;font-size:15px;font-weight:600;">Nenhum artigo encontrado.</div>`;
+    return;
+  }
+  const iconSVG = `<svg style="margin-right:6px;width:12px;margin-bottom:-2px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`;
+  main.innerHTML = posts.map(p => {
+    const data = p.criado_em ? new Date(p.criado_em).toLocaleDateString("pt-BR", { day:"2-digit", month:"long", year:"numeric" }).toUpperCase() : "";
+    const img  = p.imagem_url || "especialistas.png";
+    return `
+      <a href="post.html?id=${p.id}" class="post-card">
+        <div class="post-img"><img src="${img}" alt="${p.titulo}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"/></div>
+        <div class="post-content">
+          <span class="post-tag">${p.categoria || "NOTÍCIAS"}</span>
+          <h2 class="post-title">${p.titulo}</h2>
+          <p class="post-desc">${p.descricao || ""}</p>
+          <div class="post-meta">
+            <span>${iconSVG}${data}</span>
+          </div>
+        </div>
+      </a>`;
+  }).join("");
+}
+
+function filtrarPosts() {
+  const q = document.getElementById("search-input").value.trim().toLowerCase();
+  if (!q) { renderPosts(todosPosts); return; }
+  renderPosts(todosPosts.filter(p => p.titulo.toLowerCase().includes(q) || (p.descricao || "").toLowerCase().includes(q)));
+}
+
+document.getElementById("search-input").addEventListener("keyup", e => { if (e.key === "Enter") filtrarPosts(); });
+
+async function carregarBlog() {
+  const { data: posts } = await db
+    .from("posts")
+    .select("id, titulo, categoria, descricao, imagem_url, criado_em")
+    .eq("status", "publicado")
+    .order("criado_em", { ascending: false });
+
+  todosPosts = posts || [];
+  renderPosts(todosPosts);
+
+  // Sidebar: posts recentes
+  const recentes = (posts || []).slice(0, 5);
+  document.getElementById("recent-posts-sidebar").innerHTML = recentes.length
+    ? recentes.map(p => `<a href="post.html?id=${p.id}" class="recent-post-link">${p.titulo}</a>`).join("")
+    : `<span style="color:#a1a1aa;font-size:13px;">Nenhum post ainda.</span>`;
+
+  // Sidebar: categorias com contagem
+  const counts = {};
+  (posts || []).forEach(p => { const c = p.categoria || "NOTÍCIAS"; counts[c] = (counts[c] || 0) + 1; });
+  document.getElementById("categorias-sidebar").innerHTML = Object.entries(counts).length
+    ? Object.entries(counts).map(([cat, n]) => `<a href="#" class="cat-link" onclick="filtrarCategoria('${cat}',event)">${cat} (${n})</a>`).join("")
+    : `<a href="#" class="cat-link">Notícias (0)</a>`;
+}
+
+function filtrarCategoria(cat, e) {
+  e.preventDefault();
+  renderPosts(todosPosts.filter(p => (p.categoria || "NOTÍCIAS") === cat));
+}
+
+carregarBlog();
 </script>
 <script src="components.js"></script>
 </body>
