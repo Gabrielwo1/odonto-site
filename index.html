@@ -1753,7 +1753,7 @@ document.querySelectorAll('.btn-primary, .nav-btn').forEach(btn => {
 
       /* Rebuild cards */
       track.innerHTML = cursos.map(c => `
-        <a href="cursos.html" class="c-card" style="text-decoration:none;">
+        <a href="curso.html?id=${esc(c.id)}" class="c-card" style="text-decoration:none;">
           <img class="c-card-img"
                src="${esc(c.imagem_url || 'especialistas.png')}"
                alt="${esc(c.titulo)}"

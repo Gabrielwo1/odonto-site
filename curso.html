@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Curso — BIONEP</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="global.css"/>
+  <style>
+  /* ─── TOKENS ─────────────────────────────────────────────── */
+  :root{
+    --green-950:#003527;
+    --green-900:#001c11;
+    --green-700:#006b5f;
+    --green-600:#0b513d;
+    --green-mint:rgba(176,240,214,.3);
+    --cyan:#71f8e4;
+    --red:#560f11;
+    --gold:#c49a2a;
+    --gold-soft:rgba(196,154,42,.15);
+    --bg:#f8f9fa;
+    --bg-dark:#1b1913;
+    --bg-bento:#093220;
+    --bg-footer:#061710;
+    --text:#404944;
+    --text2:#414944;
+    --icon-bg:#edeef0;
+    --border-green:rgba(6,78,59,.3);
+    --footer-text:rgba(167,243,208,.6);
+    --white:#fff;
+    --shadow-heavy:0 25px 50px -12px rgba(0,0,0,.25);
+    --shadow-light:0 8px 24px 0 rgba(25,28,30,.06);
+    --r-card:12px;
+    --r-pill:9999px;
+    --r-hero:48px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden}
+  a{text-decoration:none;color:inherit}
+  button{border:none;cursor:pointer;font-family:inherit}
+  img{display:block;max-width:100%;object-fit:cover}
+
+  ::-webkit-scrollbar{width:5px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--green-700);border-radius:99px}
+
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+
+  .r{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
+  .r.on{opacity:1;transform:none}
+  .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+  .btn-primary,.nav-btn{will-change:transform}
+
+  /* ══════════════════════════════════════════════════════════
+     NAV
+  ══════════════════════════════════════════════════════════ */
+  #nav{
+    position:fixed;top:0;left:0;right:0;z-index:200;
+    background:rgba(248,249,250,.94);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid transparent;
+    height:93px;display:flex;align-items:center;
+    transition:border-color .3s,box-shadow .3s;
+  }
+  #nav.scrolled{border-color:rgba(0,53,39,.12);box-shadow:0 1px 12px rgba(0,0,0,.06)}
+  .nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .nav-logo{display:flex;align-items:flex-start;gap:0;flex-direction:column}
+  .nav-logo-row{display:flex;align-items:center;gap:8px}
+  .nav-links{display:flex;align-items:center;gap:0;list-style:none}
+  .nav-links a{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;
+    font-size:13px;letter-spacing:.8px;text-transform:uppercase;
+    color:var(--green-950);padding:6px 18px;position:relative;
+    transition:color .2s;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;bottom:-2px;left:18px;right:18px;
+    height:2px;background:var(--green-950);border-radius:1px;
+    transform:scaleX(0);transition:transform .25s ease;transform-origin:left;
+  }
+  .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+
+  /* ══════════════════════════════════════════════════════════
+     HERO BANNER
+  ══════════════════════════════════════════════════════════ */
+  #hero-banner {
+    margin-top: 93px;
+    position: relative;
+    width: 100%;
+    min-height: 55vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--bg-dark);
+  }
+  #hero-banner .bg-image {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    opacity: 0.8;
+  }
+  #hero-banner .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,28,17,.8) 0%, rgba(0,28,17,.2) 60%, transparent 100%);
+  }
+  .hero-banner-content {
+    position: relative;
+    z-index: 10;
+    text-align: left;
+    width: 100%;
+  }
+  .hero-breadcrumb {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-breadcrumb a { color: rgba(255,255,255,.5); transition: color .2s; }
+  .hero-breadcrumb a:hover { color: var(--cyan); }
+  .hero-breadcrumb span { color: rgba(255,255,255,.3); }
+  .hero-banner-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: clamp(36px, 5.5vw, 68px);
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    color: #fff;
+    text-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    margin-bottom: 12px;
+  }
+  .hero-category {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+  .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(145deg, #004d39 0%, #003527 100%);
+    color: white;
+    padding: 16px 36px;
+    border-radius: var(--r-pill);
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 10px 20px -5px rgba(0,53,39,.3);
+    transition: transform .25s, box-shadow .25s;
+    cursor: pointer;
+  }
+  .hero-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px -5px rgba(0,53,39,.45);
+  }
+  /* Badge inscrições abertas */
+  .inscricoes-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(113,248,228,.12);
+    border: 1px solid rgba(113,248,228,.2);
+    border-radius: var(--r-pill);
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 24px;
+  }
+  .inscricoes-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--cyan);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  /* ══════════════════════════════════════════════════════════
+     CONTENT GRID
+  ══════════════════════════════════════════════════════════ */
+  #course-content {
+    padding: 96px 0;
+    background: var(--bg);
+  }
+  .course-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .course-left { padding-right: 24px; }
+  .section-h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--green-950);
+    margin-bottom: 24px;
+    letter-spacing: -1px;
+  }
+  .course-desc {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .course-desc strong { color: var(--green-950); font-weight: 700; }
+
+  /* Right: Sticky info cards */
+  .course-right {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    position: sticky;
+    top: 120px;
+    align-self: start;
+  }
+  .info-card {
+    background: var(--white);
+    border-radius: var(--r-card);
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: var(--shadow-light);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: transform .3s, box-shadow .3s;
+  }
+  .info-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px -4px rgba(0,0,0,0.1);
+  }
+  .info-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--green-mint);
+    color: var(--green-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .info-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--green-700);
+    margin-bottom: 10px;
+  }
+  .info-value-big {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--green-950);
+    letter-spacing: -2px;
+    margin-bottom: 6px;
+  }
+  .info-value-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .prof-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--green-950);
+    line-height: 1.3;
+  }
+
+  /* WhatsApp CTA */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+    background: linear-gradient(145deg, #004d39 0%, #003527 100%);
+    color: white;
+    padding: 18px 32px;
+    border-radius: var(--r-pill);
+    font-weight: 700;
+    font-size: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 20px -5px rgba(0,53,39,0.3);
+    cursor: pointer;
+    transition: transform .25s, box-shadow .25s;
+    margin-top: 8px;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px -5px rgba(0,53,39,0.45);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════════════════════════ */
+  #footer{background:var(--bg-footer);padding:80px 0 0;margin-top:64px;}
+  .footer-top{
+    display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:48px;
+    border-bottom:1px solid var(--border-green);
+    padding-bottom:56px;margin-bottom:0;
+  }
+  .footer-logo{margin-bottom:20px;display:flex;align-items:center;gap:8px}
+  .footer-desc{font-size:14px;line-height:22px;color:var(--footer-text);max-width:268px;}
+  .footer-col-title{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(167,243,208,.5);margin-bottom:24px;}
+  .footer-links{list-style:none;display:flex;flex-direction:column;gap:14px}
+  .footer-links a{font-size:15px;color:var(--footer-text);transition:color .2s;}
+  .footer-links a:hover{color:white}
+  .footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;flex-wrap:wrap;gap:12px;}
+  .footer-copy{font-size:13px;color:rgba(167,243,208,.3);}
+  .footer-right{font-size:13px;color:rgba(167,243,208,.3);display:flex;align-items:center;gap:24px;}
+  .footer-right span::before{content:'•';margin-right:24px;color:rgba(167,243,208,.2)}
+
+  /* Skeleton loader */
+  .skeleton {
+    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 8px;
+  }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  /* Responsive */
+  @media(max-width:820px){
+    .nav-links,.nav-btn{display:none;}
+    .course-grid{grid-template-columns:1fr;}
+    .course-right{position:static;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .footer-top{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:480px){
+    .course-right{grid-template-columns:1fr;}
+    .hero-banner-title{font-size:36px;letter-spacing:-1px;}
+    .footer-top{grid-template-columns:1fr;}
+  }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div id="bionep-nav-placeholder"></div>
+
+<!-- HERO BANNER -->
+<section id="hero-banner">
+  <img id="hero-img" src="campus.png" alt="Banner do Curso" class="bg-image"/>
+  <div class="overlay"></div>
+  <div class="wrap" style="position:relative;z-index:10;width:100%;">
+    <div class="hero-banner-content r d1">
+      <nav class="hero-breadcrumb">
+        <a href="cursos.html">Cursos</a>
+        <span>/</span>
+        <span id="breadcrumb-titulo">Carregando...</span>
+      </nav>
+      <div id="inscricoes-badge" style="display:none;" class="inscricoes-badge">
+        <span class="inscricoes-dot"></span>Inscrições Abertas
+      </div>
+      <p id="hero-category" class="hero-category"></p>
+      <h1 id="hero-title" class="hero-banner-title">Carregando curso...</h1>
+      <a href="#course-content" class="hero-btn">
+        Ver detalhes do curso
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<section id="course-content">
+  <div class="wrap course-grid">
+
+    <!-- LEFT: Description -->
+    <div class="course-left r d2">
+      <h2 class="section-h2">Sobre o curso</h2>
+      <div id="course-desc-container">
+        <div class="skeleton" style="height:20px;margin-bottom:12px;"></div>
+        <div class="skeleton" style="height:20px;width:80%;margin-bottom:12px;"></div>
+        <div class="skeleton" style="height:20px;width:60%;"></div>
+      </div>
+      <p style="color:var(--green-700);font-weight:700;margin-top:32px;font-size:15px;">
+        * Consulte-nos para valores especiais e bolsas parciais limitadas.
+      </p>
+    </div>
+
+    <!-- RIGHT: Info cards -->
+    <div class="course-right r d3">
+
+      <!-- Módulos -->
+      <div class="info-card" id="card-modulos" style="display:none;">
+        <div class="info-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="info-title">Duração</div>
+        <div class="info-value-big" id="modulos-val">—</div>
+        <div class="info-value-text">Módulos Presenciais</div>
+      </div>
+
+      <!-- Carga Horária -->
+      <div class="info-card" id="card-carga" style="display:none;">
+        <div class="info-icon" style="background:rgba(196,154,42,.12);color:var(--gold);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="info-title">Carga Horária</div>
+        <div class="info-value-text" id="carga-val" style="font-size:22px;font-weight:800;color:var(--green-950);">—</div>
+      </div>
+
+      <!-- Data de início -->
+      <div class="info-card" id="card-data" style="display:none;">
+        <div class="info-icon" style="background:rgba(113,248,228,.1);color:var(--cyan);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        </div>
+        <div class="info-title">Próxima Turma</div>
+        <div class="info-value-text" id="data-val" style="font-size:18px;font-weight:800;color:var(--green-950);">—</div>
+      </div>
+
+      <!-- Professor/Coordenador -->
+      <div class="info-card" id="card-prof" style="display:none;">
+        <div class="info-icon" style="background:var(--gold-soft);color:var(--gold);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="info-title">Coordenador</div>
+        <div class="prof-name" id="prof-val">—</div>
+      </div>
+
+      <!-- WhatsApp CTA -->
+      <a href="https://wa.me/5541999999999?text=Olá!%20Tenho%20interesse%20no%20curso%20de%20" id="whatsapp-link" class="btn-primary" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        Falar com Consultor
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div id="bionep-footer-placeholder"></div>
+
+<script>
+/* ── Reveal ──────────────────────────────────────────── */
+const rEls = document.querySelectorAll('.r');
+const rObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on') });
+}, { threshold:.1, rootMargin:'0px 0px -40px 0px' });
+rEls.forEach(el => rObs.observe(el));
+
+/* ── Nav scroll ──────────────────────────────────────── */
+const nav_el = document.getElementById('nav');
+if(nav_el){ addEventListener('scroll', () => nav_el.classList.toggle('scrolled', scrollY > 20)); }
+</script>
+
+<!-- Supabase: carrega dados do curso por ?id= -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(async function(){
+  const SUPA_URL = "https://thcjrzluhsbgtbirdoxl.supabase.co";
+  const SUPA_KEY = "sb_publishable_r-rBdCg4Zf5YXpP3lkJB9A_JXEN2GDB";
+
+  /* Pega o ?id= da URL */
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+
+  if (!id) {
+    window.location.href = 'cursos.html';
+    return;
+  }
+
+  function esc(s){
+    return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '';
+  }
+
+  try {
+    const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    const { data: curso, error } = await db
+      .from('cursos')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error || !curso) {
+      window.location.href = 'cursos.html';
+      return;
+    }
+
+    /* ── <title> e breadcrumb ── */
+    document.title = `${curso.titulo} — BIONEP`;
+    document.getElementById('breadcrumb-titulo').textContent = curso.titulo;
+
+    /* ── Hero ── */
+    document.getElementById('hero-title').textContent = curso.titulo;
+
+    if (curso.categoria) {
+      document.getElementById('hero-category').textContent = curso.categoria;
+    }
+
+    if (curso.imagem_url) {
+      document.getElementById('hero-img').src = curso.imagem_url;
+    }
+
+    if (curso.inscricoes_abertas) {
+      document.getElementById('inscricoes-badge').style.display = 'inline-flex';
+    }
+
+    /* ── Atualiza link do WhatsApp com o nome do curso ── */
+    const waMensagem = encodeURIComponent(`Olá! Tenho interesse no curso de ${curso.titulo}. Pode me passar mais informações?`);
+    document.getElementById('whatsapp-link').href = `https://wa.me/5541999999999?text=${waMensagem}`;
+
+    /* ── Descrição (parágrafo a parágrafo) ── */
+    const descContainer = document.getElementById('course-desc-container');
+    if (curso.descricao) {
+      const paragrafos = curso.descricao.split('\n\n').filter(p => p.trim());
+      descContainer.innerHTML = paragrafos.map(p =>
+        `<p class="course-desc">${esc(p).replace(/\n/g, '<br>')}</p>`
+      ).join('');
+    } else {
+      descContainer.innerHTML = `<p class="course-desc">Informações sobre este curso em breve.</p>`;
+    }
+
+    /* ── Info cards (só aparecem se tiver dado) ── */
+    if (curso.modulos) {
+      document.getElementById('modulos-val').textContent = curso.modulos;
+      document.getElementById('card-modulos').style.display = 'flex';
+    }
+
+    if (curso.carga_horaria) {
+      document.getElementById('carga-val').textContent = curso.carga_horaria;
+      document.getElementById('card-carga').style.display = 'flex';
+    }
+
+    if (curso.data_inicio) {
+      document.getElementById('data-val').textContent = curso.data_inicio;
+      document.getElementById('card-data').style.display = 'flex';
+    }
+
+    if (curso.professor) {
+      document.getElementById('prof-val').textContent = curso.professor;
+      document.getElementById('card-prof').style.display = 'flex';
+    }
+
+    /* ── Re-trigger reveal ── */
+    document.querySelectorAll('.r').forEach(el => rObs.observe(el));
+
+  } catch(err) {
+    console.error('Erro ao carregar curso:', err.message);
+    window.location.href = 'cursos.html';
+  }
+})();
+</script>
+
+<script src="components.js"></script>
+</body>
+</html>

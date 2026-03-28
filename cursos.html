@@ -429,7 +429,7 @@ rEls.forEach(el => rObs.observe(el));
     }
 
     grid.innerHTML = data.map(c => `
-      <a href="cursos.html" class="c-card r">
+      <a href="curso.html?id=${esc(c.id)}" class="c-card r">
         <img class="c-card-img"
              src="${esc(c.imagem_url || 'especialistas.png')}"
              alt="${esc(c.titulo)}"
