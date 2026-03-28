@@ -1,7 +1,7 @@
 // BIONEP Admin — Cliente Supabase Central
 (function () {
-  const URL = "https://jyrcknvxnkobngpzrqok.supabase.co";
-  const KEY = "sb_publishable_6zohSf7oHukZKO9h0CY-6g_yVP97NTK";
+  const URL = "https://thcjrzluhsbgtbirdoxl.supabase.co";
+  const KEY = "sb_publishable_r-rBdCg4Zf5YXpP3lkJB9A_JXEN2GDB";
 
   // Expõe o cliente globalmente sem conflitar com o namespace 'supabase' do CDN
   window.supabaseClient = window.supabase.createClient(URL, KEY);
