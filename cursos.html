@@ -428,20 +428,20 @@ rEls.forEach(el => rObs.observe(el));
       return;
     }
 
+    const arrowCircle = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M12 6l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
     grid.innerHTML = data.map(c => `
       <a href="${c.slug ? `/cursos/${esc(c.slug)}` : `curso.html?id=${esc(c.id)}`}" class="c-card r">
         <img class="c-card-img"
              src="${esc(c.imagem_url || 'especialistas.png')}"
              alt="${esc(c.titulo)}"
              onerror="this.src='especialistas.png'"/>
-        <div class="c-card-ov">
-          <p class="c-card-label">${esc(c.categoria || 'ESPECIALIZAÇÃO')}</p>
-          <h3 class="c-card-title">${esc(c.titulo)}</h3>
-          <div class="c-card-foot">
-            <span class="btn-card">Ver Detalhes ${arrowSvg}</span>
-            ${c.inscricoes_abertas
-              ? '<span class="c-open"><span class="c-open-dot"></span>Inscrições Abertas</span>'
-              : ''}
+        <div class="c-card-ov" style="background:transparent;padding-bottom:24px;">
+          <div class="c-card-foot" style="justify-content:flex-start;">
+            <span class="btn-card"
+                  style="width:48px;height:48px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              ${arrowCircle}
+            </span>
           </div>
         </div>
       </a>
