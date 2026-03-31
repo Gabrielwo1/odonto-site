@@ -846,15 +846,33 @@
     max-width:400px;text-align:right;flex-shrink:0;
   }
 
-  .prof-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
+  /* ── Carousel wrapper ───────────────────────────────────── */
+  .prof-carousel{
+    overflow:hidden;
+    -webkit-mask-image:linear-gradient(to right,transparent 0%,black 7%,black 93%,transparent 100%);
+    mask-image:linear-gradient(to right,transparent 0%,black 7%,black 93%,transparent 100%);
+  }
+  .prof-track{
+    display:flex;
     gap:20px;
+    width:max-content;
+    animation:profScroll 32s linear infinite;
+  }
+  .prof-carousel:hover .prof-track{
+    animation-play-state:paused;
+  }
+  @keyframes profScroll{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
   }
 
+  /* ── Cards ───────────────────────────────────────────────── */
   .prof-card{
+    flex-shrink:0;
+    width:280px;
+    aspect-ratio:3/4;
     position:relative;border-radius:20px;overflow:hidden;
-    aspect-ratio:3/4;background:#0d1f16;
+    background:#0d1f16;
     box-shadow:0 8px 32px -8px rgba(0,0,0,.12);
     transition:transform .4s cubic-bezier(.4,0,.2,1),box-shadow .4s;
     cursor:default;
@@ -869,8 +887,6 @@
     transition:transform .6s cubic-bezier(.4,0,.2,1);
   }
   .prof-card:hover .prof-card-img{transform:scale(1.05)}
-
-  /* gradient vignette — lighter/warmer than cursos */
   .prof-card::after{
     content:'';position:absolute;inset:0;
     background:linear-gradient(
@@ -883,18 +899,7 @@
     pointer-events:none;
   }
 
-  /* specialty pill — top right */
-  .prof-card-specialty{
-    position:absolute;top:18px;right:18px;z-index:10;
-    background:rgba(196,154,42,.15);
-    border:1px solid rgba(196,154,42,.35);
-    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-    color:var(--gold);font-size:9px;font-weight:800;
-    letter-spacing:2px;text-transform:uppercase;
-    padding:5px 12px;border-radius:99px;
-  }
-
-  /* bottom info */
+  /* ── Bottom info ─────────────────────────────────────────── */
   .prof-card-bottom{
     position:absolute;bottom:0;left:0;right:0;
     z-index:10;padding:24px 24px 28px;
@@ -915,13 +920,12 @@
     text-transform:uppercase;letter-spacing:1.2px;
   }
 
-  @media(max-width:1024px){.prof-grid{grid-template-columns:repeat(3,1fr)}}
   @media(max-width:700px){
     .prof-head{flex-direction:column;align-items:flex-start}
     .prof-subtext{text-align:left;max-width:100%}
-    .prof-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+    .prof-card{width:220px}
   }
-  @media(max-width:420px){.prof-grid{grid-template-columns:1fr}}
+  @media(max-width:420px){.prof-card{width:180px}}
   </style>
 </head>
 <body>
@@ -1143,69 +1147,111 @@
         <p class="prof-subtext">Mestres e doutores com trajetória clínica e acadêmica reconhecidas no Brasil e no exterior.</p>
       </div>
 
-      <!-- Cards grid -->
-      <div class="prof-grid">
+      <!-- Carousel (cards duplicados para loop infinito) -->
+      <div class="prof-carousel">
+        <div class="prof-track" id="profTrack">
 
-        <!-- Prof 1 -->
-        <div class="prof-card r d1">
-          <img class="prof-card-img" src="prof-otavio-augusto-pozza.png" alt="Prof. Dr. Otávio Augusto Pozza"/>
-          <div class="prof-card-bottom">
-            <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Prof. Dr. Otávio Pozza</h4>
-            <p class="prof-card-role">Coordenador — Especialização em Ortodontia</p>
+          <!-- SET 1 -->
+          <div class="prof-card">
+            <img class="prof-card-img" src="prof-otavio-augusto-pozza.png" alt="Prof. Dr. Otávio Augusto Pozza"/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Prof. Dr. Otávio Pozza</h4>
+              <p class="prof-card-role">Coordenador — Ortodontia</p>
+            </div>
           </div>
-        </div>
-
-        <!-- Prof 2 -->
-        <div class="prof-card r d2">
-          <img class="prof-card-img" src="prof-luiz-fernando-fariuk.png" alt="Prof. Dr. Luiz Fernando Fariuk"/>
-          <div class="prof-card-bottom">
-            <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Prof. Dr. Luiz F. Fariuk</h4>
-            <p class="prof-card-role">Especialização em Endodontia</p>
+          <div class="prof-card">
+            <img class="prof-card-img" src="prof-luiz-fernando-fariuk.png" alt="Prof. Dr. Luiz Fernando Fariuk"/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Prof. Dr. Luiz F. Fariuk</h4>
+              <p class="prof-card-role">Especialização em Endodontia</p>
+            </div>
           </div>
-        </div>
-
-        <!-- Prof 3 -->
-        <div class="prof-card r d3">
-          <img class="prof-card-img" src="Dr Jaques Luiz.jpg" alt="Dr. Jaques Luiz"/>
-          <div class="prof-card-bottom">
-            <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Dr. Jaques Luiz</h4>
-            <p class="prof-card-role">Coordenador — Especialização em Implante</p>
+          <div class="prof-card">
+            <img class="prof-card-img" src="Dr Jaques Luiz.jpg" alt="Dr. Jaques Luiz"/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Dr. Jaques Luiz</h4>
+              <p class="prof-card-role">Coordenador — Implantodontia</p>
+            </div>
           </div>
-        </div>
-
-        <!-- Prof 4 -->
-        <div class="prof-card r d4">
-          <img class="prof-card-img" src="dra-karen-dalla-costa.png" alt="Dra. Karen Dalla Costa"/>
-          <div class="prof-card-bottom">
-            <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Dra. Karen Dalla Costa</h4>
-            <p class="prof-card-role">Coordenadora — Cirurgia Oral Menor</p>
+          <div class="prof-card">
+            <img class="prof-card-img" src="dra-karen-dalla-costa.png" alt="Dra. Karen Dalla Costa"/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Dra. Karen Dalla Costa</h4>
+              <p class="prof-card-role">Coordenadora — Cirurgia Oral Menor</p>
+            </div>
           </div>
-        </div>
-
-        <!-- Prof 5 -->
-        <div class="prof-card r d1">
-          <img class="prof-card-img" src="dr-felipe-archetti.png" alt="Dr. Felipe Archetti"/>
-          <div class="prof-card-bottom">
-            <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Dr. Felipe Archetti</h4>
-            <p class="prof-card-role">Professor do Curso de Endodontia</p>
+          <div class="prof-card">
+            <img class="prof-card-img" src="dr-felipe-archetti.png" alt="Dr. Felipe Archetti"/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Dr. Felipe Archetti</h4>
+              <p class="prof-card-role">Professor — Endodontia</p>
+            </div>
           </div>
-        </div>
-
-        <!-- Prof 6 -->
-        <div class="prof-card r d2">
-          <img class="prof-card-img" src="dra-eluana-soares-de-andrade.png" alt="Dra. Eluana Soares de Andrade"/>
-          <div class="prof-card-bottom">
-            <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Dra. Eluana Soares</h4>
-            <p class="prof-card-role">Clínica Geral e Ortodontia</p>
+          <div class="prof-card">
+            <img class="prof-card-img" src="dra-eluana-soares-de-andrade.png" alt="Dra. Eluana Soares de Andrade"/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Dra. Eluana Soares</h4>
+              <p class="prof-card-role">Clínica Geral e Ortodontia</p>
+            </div>
           </div>
-        </div>
 
+          <!-- SET 2 — duplicado para loop contínuo -->
+          <div class="prof-card" aria-hidden="true">
+            <img class="prof-card-img" src="prof-otavio-augusto-pozza.png" alt=""/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Prof. Dr. Otávio Pozza</h4>
+              <p class="prof-card-role">Coordenador — Ortodontia</p>
+            </div>
+          </div>
+          <div class="prof-card" aria-hidden="true">
+            <img class="prof-card-img" src="prof-luiz-fernando-fariuk.png" alt=""/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Prof. Dr. Luiz F. Fariuk</h4>
+              <p class="prof-card-role">Especialização em Endodontia</p>
+            </div>
+          </div>
+          <div class="prof-card" aria-hidden="true">
+            <img class="prof-card-img" src="Dr Jaques Luiz.jpg" alt=""/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Dr. Jaques Luiz</h4>
+              <p class="prof-card-role">Coordenador — Implantodontia</p>
+            </div>
+          </div>
+          <div class="prof-card" aria-hidden="true">
+            <img class="prof-card-img" src="dra-karen-dalla-costa.png" alt=""/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Dra. Karen Dalla Costa</h4>
+              <p class="prof-card-role">Coordenadora — Cirurgia Oral Menor</p>
+            </div>
+          </div>
+          <div class="prof-card" aria-hidden="true">
+            <img class="prof-card-img" src="dr-felipe-archetti.png" alt=""/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Dr. Felipe Archetti</h4>
+              <p class="prof-card-role">Professor — Endodontia</p>
+            </div>
+          </div>
+          <div class="prof-card" aria-hidden="true">
+            <img class="prof-card-img" src="dra-eluana-soares-de-andrade.png" alt=""/>
+            <div class="prof-card-bottom">
+              <div class="prof-card-accent"></div>
+              <h4 class="prof-card-name">Dra. Eluana Soares</h4>
+              <p class="prof-card-role">Clínica Geral e Ortodontia</p>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </section>
