@@ -1148,56 +1148,67 @@
 
         <!-- Prof 1 -->
         <div class="prof-card r d1">
-          <span class="prof-card-specialty">Endodontia</span>
-          <img class="prof-card-img" src="especialistas.png" alt="Dr. Felipe Archetti"/>
+          <span class="prof-card-specialty">Ortodontia · Fundador</span>
+          <img class="prof-card-img" src="prof-otavio-augusto-pozza.png" alt="Prof. Dr. Otávio Augusto Pozza"/>
           <div class="prof-card-bottom">
             <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Dr. Felipe Archetti</h4>
-            <p class="prof-card-role">Especialista em Endodontia</p>
+            <h4 class="prof-card-name">Prof. Dr. Otávio Pozza</h4>
+            <p class="prof-card-role">Coordenador — Especialização em Ortodontia</p>
           </div>
         </div>
 
         <!-- Prof 2 -->
         <div class="prof-card r d2">
           <span class="prof-card-specialty">Endodontia</span>
-          <img class="prof-card-img" src="especialistas.png" alt="Dr. Flares Baratto Filho" style="object-position:right top"/>
+          <img class="prof-card-img" src="prof-luiz-fernando-fariuk.png" alt="Prof. Dr. Luiz Fernando Fariuk"/>
           <div class="prof-card-bottom">
             <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Dr. Flares Baratto Filho</h4>
-            <p class="prof-card-role">Mestre em Endodontia</p>
+            <h4 class="prof-card-name">Prof. Dr. Luiz F. Fariuk</h4>
+            <p class="prof-card-role">Especialização em Endodontia</p>
           </div>
         </div>
 
         <!-- Prof 3 -->
         <div class="prof-card r d3">
-          <span class="prof-card-specialty">Ortodontia</span>
-          <img class="prof-card-img" src="especialistas.png" alt="Dr. Otávio Augusto Pozza"/>
+          <span class="prof-card-specialty">Implantodontia</span>
+          <img class="prof-card-img" src="Dr Jaques Luiz.jpg" alt="Dr. Jaques Luiz"/>
           <div class="prof-card-bottom">
             <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Dr. Otávio Pozza</h4>
-            <p class="prof-card-role">Especialista em Ortodontia</p>
+            <h4 class="prof-card-name">Dr. Jaques Luiz</h4>
+            <p class="prof-card-role">Coordenador — Especialização em Implante</p>
           </div>
         </div>
 
         <!-- Prof 4 -->
         <div class="prof-card r d4">
-          <span class="prof-card-specialty">Odontopediatria</span>
-          <img class="prof-card-img" src="odontopediatria.png" alt="Dr. Diogo Alexandre de Oliveira"/>
+          <span class="prof-card-specialty">Cirurgia Oral Menor</span>
+          <img class="prof-card-img" src="dra-karen-dalla-costa.png" alt="Dra. Karen Dalla Costa"/>
           <div class="prof-card-bottom">
             <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Dr. Diogo Oliveira</h4>
-            <p class="prof-card-role">Especialista em Odontopediatria</p>
+            <h4 class="prof-card-name">Dra. Karen Dalla Costa</h4>
+            <p class="prof-card-role">Coordenadora — Cirurgia Oral Menor</p>
           </div>
         </div>
 
         <!-- Prof 5 -->
         <div class="prof-card r d1">
-          <span class="prof-card-specialty">Cirurgia Bucal</span>
-          <img class="prof-card-img" src="cirurgia-bucal.png" alt="Dra. Karen Dalla Costa"/>
+          <span class="prof-card-specialty">Endodontia</span>
+          <img class="prof-card-img" src="dr-felipe-archetti.png" alt="Dr. Felipe Archetti"/>
           <div class="prof-card-bottom">
             <div class="prof-card-accent"></div>
-            <h4 class="prof-card-name">Dra. Karen Dalla Costa</h4>
-            <p class="prof-card-role">Especialista em Cirurgia Bucal</p>
+            <h4 class="prof-card-name">Dr. Felipe Archetti</h4>
+            <p class="prof-card-role">Professor do Curso de Endodontia</p>
+          </div>
+        </div>
+
+        <!-- Prof 6 -->
+        <div class="prof-card r d2">
+          <span class="prof-card-specialty">Clínica Geral · Ortodontia</span>
+          <img class="prof-card-img" src="dra-eluana-soares-de-andrade.png" alt="Dra. Eluana Soares de Andrade"/>
+          <div class="prof-card-bottom">
+            <div class="prof-card-accent"></div>
+            <h4 class="prof-card-name">Dra. Eluana Soares</h4>
+            <p class="prof-card-role">Clínica Geral e Ortodontia</p>
           </div>
         </div>
 
@@ -1843,7 +1854,7 @@ document.querySelectorAll('.btn-primary, .nav-btn').forEach(btn => {
     /* ── 2. CURSOS: até 6 cursos para o carrossel ─────── */
     const { data: cursos } = await db
       .from('cursos')
-      .select('id,titulo,categoria,imagem_url,inscricoes_abertas')
+      .select('id,titulo,categoria,imagem_url,inscricoes_abertas,slug')
       .order('criado_em', { ascending: false })
       .limit(6);
 
@@ -1854,7 +1865,7 @@ document.querySelectorAll('.btn-primary, .nav-btn').forEach(btn => {
 
       /* Rebuild cards */
       track.innerHTML = cursos.map(c => `
-        <a href="curso.html?id=${esc(c.id)}" class="c-card" style="text-decoration:none;">
+        <a href="${c.slug ? `/cursos/${esc(c.slug)}` : `curso.html?id=${esc(c.id)}`}" class="c-card" style="text-decoration:none;">
           <img class="c-card-img"
                src="${esc(c.imagem_url || 'especialistas.png')}"
                alt="${esc(c.titulo)}"

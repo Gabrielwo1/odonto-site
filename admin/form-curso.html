@@ -110,7 +110,17 @@
 
         <div class="form-group full">
           <label>Título do Curso</label>
-          <input type="text" id="titulo" placeholder="Ex: Harmonização Orofacial" />
+          <input type="text" id="titulo" placeholder="Ex: Harmonização Orofacial" oninput="autoSlug(this.value)" />
+        </div>
+
+        <div class="form-group full">
+          <label>URL do Curso <span style="font-weight:500;color:#a1a1aa;">(gerada automaticamente — editável)</span></label>
+          <div style="display:flex;align-items:center;gap:0;border:1px solid rgba(0,0,0,0.1);border-radius:10px;overflow:hidden;background:#fdfdfd;">
+            <span style="padding:14px 16px;background:#f0f4f3;font-size:13px;font-weight:600;color:#888;white-space:nowrap;border-right:1px solid rgba(0,0,0,0.08);">/cursos/</span>
+            <input type="text" id="slug" placeholder="harmonizacao-orofacial"
+                   style="border:none;border-radius:0;flex:1;margin:0;" />
+          </div>
+          <span style="font-size:12px;color:#a1a1aa;margin-top:4px;">Apenas letras minúsculas, números e hífens. Ex: <code>harmonizacao-orofacial</code></span>
         </div>
 
         <div class="form-grid">
@@ -215,6 +225,7 @@ async function carregarCurso(id) {
   const { data, error } = await supabaseClient.from("cursos").select("*").eq("id", id).single();
   if (error || !data) { alert("Curso não encontrado."); return; }
   document.getElementById("titulo").value               = data.titulo        || "";
+  document.getElementById("slug").value                 = data.slug          || "";
   document.getElementById("categoria").value            = data.categoria     || "ESPECIALIZAÇÃO";
   document.getElementById("descricao").value            = data.descricao     || "";
   document.getElementById("professor").value            = data.professor     || "";
@@ -234,6 +245,29 @@ async function carregarCurso(id) {
     bannerPreview.style.display = "block";
     document.getElementById("file-drop-label-banner").textContent = "Clique para trocar o banner";
   }
+}
+
+// ── Slug auto-generation ───────────────────────────────────
+function generateSlug(str) {
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')  // remove accents
+    .replace(/[^a-z0-9\s-]/g, '')     // remove non-alphanumeric
+    .trim()
+    .replace(/[\s]+/g, '-')           // spaces → hyphens
+    .replace(/-+/g, '-')              // collapse multiple hyphens
+    .replace(/^-+|-+$/g, '');         // trim leading/trailing hyphens
+}
+
+// only auto-fill if slug hasn't been manually edited
+let slugUserEdited = false;
+document.getElementById('slug').addEventListener('input', () => { slugUserEdited = true; });
+document.getElementById('titulo').addEventListener('blur',  () => { slugUserEdited = false; });
+
+function autoSlug(val) {
+  if (slugUserEdited) return;
+  document.getElementById('slug').value = generateSlug(val);
 }
 
 // ── Preview local ao escolher arquivo ─────────────────────
@@ -303,7 +337,10 @@ async function salvarCurso() {
     imagem_banner_url = await uploadImagem(bannerInput.files[0]);
   }
 
-  const payload = { titulo, categoria, descricao, professor, carga_horaria, data_inicio, modulos, inscricoes_abertas };
+  const slugRaw = document.getElementById("slug").value.trim();
+  const slug = slugRaw ? generateSlug(slugRaw) : generateSlug(titulo);
+
+  const payload = { titulo, categoria, descricao, professor, carga_horaria, data_inicio, modulos, inscricoes_abertas, slug };
   if (imagem_url) payload.imagem_url = imagem_url;
   if (imagem_banner_url) payload.imagem_banner_url = imagem_banner_url;
 

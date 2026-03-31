@@ -1,0 +1,7 @@
+# ── Redirects / Rewrites ──────────────────────────────────────────────────────
+# Slug-based course pages: /cursos/nome-do-curso → /cursos/index.html (200 rewrite)
+# This allows cursos/index.html to read window.location.pathname and resolve the slug.
+[[redirects]]
+  from   = "/cursos/:slug"
+  to     = "/cursos/index.html"
+  status = 200
