@@ -63,28 +63,32 @@
   .hero-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(145deg,#004d39 0%,#003527 100%);color:white;padding:16px 36px;border-radius:var(--r-pill);font-weight:700;font-size:15px;box-shadow:0 10px 20px -5px rgba(0,53,39,.3);transition:transform .25s,box-shadow .25s;cursor:pointer;}
   .hero-btn:hover{transform:translateY(-2px);box-shadow:0 16px 32px -5px rgba(0,53,39,.45);}
 
-  /* ── INFO BAR (cards horizontais centralizados) ── */
+  /* ── INFO BAR (cards horizontais alinhados à esquerda) ── */
   #info-bar{
     background:var(--white);
     border-bottom:1px solid rgba(0,0,0,.06);
     padding:0;
   }
   .info-bar-inner{
+    max-width:1280px;
+    margin:0 auto;
+    padding:0 32px;
     display:flex;
     align-items:stretch;
-    justify-content:center;
+    justify-content:flex-start;
     gap:0;
   }
   .info-card{
     display:flex;flex-direction:column;align-items:flex-start;
-    padding:40px 44px;
+    padding:40px 48px 40px 0;
     border-right:1px solid rgba(0,0,0,.06);
-    flex:1;
-    min-width:200px;
+    margin-right:48px;
+    flex:0 0 auto;
+    min-width:180px;
     transition:background .25s;
     gap:0;
   }
-  .info-card:last-child{border-right:none;}
+  .info-card:last-child{border-right:none;margin-right:0;}
   .info-card:hover{background:rgba(0,53,39,.03);}
   .info-icon{
     width:44px;height:44px;border-radius:14px;
@@ -112,7 +116,7 @@
 
   /* ── CONTENT ── */
   #course-content{padding:80px 0 96px;background:var(--bg);}
-  .content-center{max-width:780px;margin:0 auto;}
+  .content-center{max-width:780px;margin:0;}
   .section-h2{font-size:36px;font-weight:800;color:var(--green-950);margin-bottom:28px;letter-spacing:-1px;}
   .course-desc{font-size:17px;line-height:1.85;color:var(--text);margin-bottom:20px;}
   .course-desc strong{color:var(--green-950);font-weight:700;}
