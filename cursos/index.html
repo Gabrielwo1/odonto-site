@@ -77,27 +77,38 @@
   }
   .info-card{
     display:flex;flex-direction:column;align-items:flex-start;
-    padding:36px 48px;
+    padding:40px 44px;
     border-right:1px solid rgba(0,0,0,.06);
     flex:1;
-    max-width:280px;
-    transition:background .2s;
+    min-width:200px;
+    transition:background .25s;
+    gap:0;
   }
   .info-card:last-child{border-right:none;}
-  .info-card:hover{background:rgba(0,53,39,.025);}
+  .info-card:hover{background:rgba(0,53,39,.03);}
   .info-icon{
-    width:40px;height:40px;border-radius:50%;
+    width:44px;height:44px;border-radius:14px;
     background:var(--green-mint);color:var(--green-700);
     display:flex;align-items:center;justify-content:center;
-    margin-bottom:16px;
+    margin-bottom:20px;
+    flex-shrink:0;
   }
   .info-title{
-    font-size:11px;font-weight:700;text-transform:uppercase;
-    letter-spacing:1.5px;color:var(--green-700);margin-bottom:8px;
+    font-size:10px;font-weight:700;text-transform:uppercase;
+    letter-spacing:2px;color:var(--green-700);margin-bottom:10px;
   }
-  .info-value-text{font-size:22px;font-weight:800;color:var(--green-950);line-height:1.2;}
-  .info-value-sub{font-size:13px;font-weight:500;color:var(--text);margin-top:4px;opacity:.7;}
-  .prof-name{font-size:18px;font-weight:800;color:var(--green-950);line-height:1.3;}
+  .info-value-text{
+    font-size:26px;font-weight:800;color:var(--green-950);
+    line-height:1.15;letter-spacing:-.5px;
+  }
+  .info-value-sub{
+    font-size:12px;font-weight:500;color:var(--text);
+    margin-top:5px;opacity:.6;letter-spacing:.2px;
+  }
+  .prof-name{
+    font-size:20px;font-weight:800;color:var(--green-950);
+    line-height:1.25;letter-spacing:-.3px;
+  }
 
   /* ── CONTENT ── */
   #course-content{padding:80px 0 96px;background:var(--bg);}
@@ -193,11 +204,12 @@
 
     <div class="info-card" id="card-modulos" style="display:none;">
       <div class="info-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <!-- ícone de lista com checkmark — representa módulos -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/></svg>
       </div>
-      <div class="info-title">Duração</div>
+      <div class="info-title">Módulos</div>
       <div class="info-value-text" id="modulos-val">—</div>
-      <div class="info-value-sub">Módulos Presenciais</div>
+      <div class="info-value-sub" id="modulos-sub" style="display:none;">Módulos Presenciais</div>
     </div>
 
     <div class="info-card" id="card-data" style="display:none;">
@@ -321,10 +333,43 @@ if(nav_el){ addEventListener('scroll', () => nav_el.classList.toggle('scrolled',
     }
 
     /* ── Info cards ── */
-    if (curso.modulos)       { document.getElementById('modulos-val').textContent = curso.modulos; document.getElementById('card-modulos').style.display = 'flex'; }
-    if (curso.carga_horaria) { document.getElementById('carga-val').textContent   = curso.carga_horaria; document.getElementById('card-carga').style.display = 'flex'; }
-    if (curso.data_inicio)   { document.getElementById('data-val').textContent    = curso.data_inicio; document.getElementById('card-data').style.display = 'flex'; }
-    if (curso.professor)     { document.getElementById('prof-val').textContent    = curso.professor; document.getElementById('card-prof').style.display = 'flex'; }
+
+    // Módulos: pode vir como JSON array ["mod1","mod2",...] ou string simples
+    if (curso.modulos) {
+      let modulosLabel = curso.modulos;
+      try {
+        const arr = typeof curso.modulos === 'string' ? JSON.parse(curso.modulos) : curso.modulos;
+        if (Array.isArray(arr) && arr.length) {
+          modulosLabel = arr.length;
+          document.getElementById('modulos-sub').style.display = 'block';
+        }
+      } catch(e) { /* string simples, usa como está */ }
+      document.getElementById('modulos-val').textContent = modulosLabel;
+      document.getElementById('card-modulos').style.display = 'flex';
+    }
+
+    // Carga horária
+    if (curso.carga_horaria) {
+      document.getElementById('carga-val').textContent = curso.carga_horaria;
+      document.getElementById('card-carga').style.display = 'flex';
+    }
+
+    // Data: formata YYYY-MM-DD → DD/MM/YYYY em pt-BR
+    if (curso.data_inicio) {
+      let dataLabel = curso.data_inicio;
+      try {
+        const d = new Date(curso.data_inicio + 'T12:00:00');
+        dataLabel = d.toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+      } catch(e) {}
+      document.getElementById('data-val').textContent = dataLabel;
+      document.getElementById('card-data').style.display = 'flex';
+    }
+
+    // Coordenador
+    if (curso.professor) {
+      document.getElementById('prof-val').textContent = curso.professor;
+      document.getElementById('card-prof').style.display = 'flex';
+    }
 
     document.querySelectorAll('.r').forEach(el => rObs.observe(el));
 
